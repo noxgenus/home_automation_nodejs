@@ -99,12 +99,17 @@ display:none;
 }
 
 h1 { 
-color: #bb1313;
+color: #c5c5c5;
 font-size: 1.5em;
 line-height: 1.0em;
 font-weight: normal;
 margin: 0px;
 text-transform:uppercase;
+}
+.prefix{ 
+color: #4292f4;
+float:left;
+margin-right: 10px;
 }
 .green {
 color: #0fd600;
@@ -119,7 +124,7 @@ color: #ff7200;
 color: #fff;
 }
 h2 { 
-color: #ccc;
+color: #c5c5c5;
 font-size: 2.5em;
 line-height: 1.0em;
 font-weight: normal;
@@ -245,12 +250,12 @@ text-align:center;
     }
 }
 
-#feedback {
+#feedbackholder {
 display:block;
 width:100%;
 padding:1%;
 margin:5px 0px 5px 5px;
-border:2px solid #bb1313;
+border:2px solid #4292f4;
 -moz-box-sizing: content-box;
 -webkit-box-sizing: content-box;
 -ms-box-sizing: content-box;
@@ -259,7 +264,7 @@ font-size: 2em;
 line-height: 1.0em;
 font-weight: normal;
 text-transform:uppercase;
-color: #bb1313;
+color: #c5c5c5;
 background: #222;
 }
 
@@ -272,7 +277,7 @@ background: #222;
 
 <div id="container">
 
-<div id="feedback"><h1>Starting system...</h1></div>
+<div id="feedbackholder"><h1 class="prefix">Last status message: </h1><span id="feedback"><h1>Starting system...</h1></span></div>
 
 <a class="butt" id="relay5" onclick="relay(5);"> WORKSTATION </a> 
 <a class="butt" id="relay1" onclick="relay(1);"> NODE1 </a> 
@@ -304,26 +309,33 @@ background: #222;
 		var id = data.id
        	var active = data.active
 
+       	// ON
 	       	if (active == 1) {
 					if (id == 5) {
 						document.getElementById("relay" + id).style.backgroundColor = "#4e9c37";
-						Feedback.innerHTML = "<h1 class='feedbacking'>WORKSTATION ONLINE</h1>";
+						Feedback.innerHTML = "<h1>WORKSTATION ONLINE</h1>";
 					} else if (id == 6 || id == 7) {
 						document.getElementById("relay" + id).style.backgroundColor = "#4056d1";
-						Feedback.innerHTML = "<h1 class='feedbacking'>REMOTE SERIAL CALL ON</h1>";
+						Feedback.innerHTML = "<h1>REMOTE SERIAL CALL ON</h1>";
 					} else {
 						document.getElementById("relay" + id).style.backgroundColor = "#10a620";
-						Feedback.innerHTML = "<h1 class='feedbacking'>Node "+id+" ON</h1>";
+						Feedback.innerHTML = "<h1>Node "+id+" ON</h1>";
 					}
-
+		// OFF
 			} else if (active == 0) {
 					document.getElementById("relay" + id).style.backgroundColor = "#bb1313";
 					if (id == 5) {
-						Feedback.innerHTML = "<h1 class='feedbacking'>WORKSTATION OFFLINE</h1>";
+						Feedback.innerHTML = "<h1>WORKSTATION OFFLINE</h1>";
 					} else if (id == 6 || id == 7) {
-						Feedback.innerHTML = "<h1 class='feedbacking'>REMOTE SERIAL CALL OFF</h1>";
+						Feedback.innerHTML = "<h1>REMOTE SERIAL CALL OFF</h1>";
 					} else {
-						Feedback.innerHTML = "<h1 class='feedbacking'>Node "+id+" OFF</h1>";
+						Feedback.innerHTML = "<h1>Node "+id+" OFF</h1>";
+					}
+		// TEMP BOOTING
+			} else if (active == 3) {			
+					if (id == 5) {
+						Feedback.innerHTML = "<h1>WORKSTATION BOOTING</h1>";
+						document.getElementById("relay" + id).style.backgroundColor = "#9b59a8";
 					}
 			}
 	});

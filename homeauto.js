@@ -126,6 +126,14 @@ setInterval(function(){pings();}, 5000);
         } else if (data.value == 5) {
             console.log("Wake on Lan 6C:F0:49:E6:73:EB");
             wol.wake('6C:F0:49:E6:73:EB');
+            io.sockets.emit('relayCallback', {id: data.value, active: 3});
+            
+            function pingstatusreset(){
+              pingstatus = true;
+            }
+
+            setTimeout(pingstatusreset, 3000);
+
 
         // SERIAL REMOTES HC12 TRANSPONDERS
 
