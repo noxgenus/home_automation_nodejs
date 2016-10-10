@@ -48,3 +48,29 @@ On end of file, change <br>
 'enable_uart=0' to 'enable_uart=1' <br>
 and below that add 'dtoverlay=pi3-miniuart-bt' <br>
 
+#Touchscreen 800x480 (Adafruit) full kiosk config
+
+Setting correct screen size, edit /boot/config.txt:<br><br>
+
+uncomment to force a specific HDMI mode (this will force VGA)<br>
+hdmi_group=2<br>
+hdmi_mode=1<br>
+hdmi_mode=87<br>
+hdmi_cvt 800 480 60 0 0 0<br><br>
+
+Install iceweasel:<br>
+apt-get install iceweasel<br><br>
+
+Install Firefox R-Kiosk add-on from within iceweasel:<br>
+https://addons.mozilla.org/en-us/firefox/addon/r-kiosk/
+<br><br>
+
+For keeping screen from going in stand-by edit:<br>
+/etc/lightdm/lightdm.conf<br><br>
+
+in the SeatDefaults section it gives the command for starting the X server which I modified to get it to turn off the screen saver as well as dpms<br><br>
+
+[SeatDefaults]<br><br>
+
+xserver-command=X -s 0 -dpms<br><br>
+
