@@ -1,0 +1,335 @@
+<html>
+<head>
+<title>NODEJS HOME AUTOMATIONS V1.0</title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+<style>
+
+
+*{ 
+margin:0; 
+padding:0; 
+-webkit-user-select: none !important;
+  cursor: none !important;
+}
+@font-face {
+font-family: 'berthold_akzidenz_groteskCn';
+src: url('../data/fonts/akzidenzgroteskbe-cn-webfont.eot');
+src: url('../data/fonts/akzidenzgroteskbe-cn-webfont.eot?#iefix') format('embedded-opentype'),
+url('../data/fonts/akzidenzgroteskbe-cn-webfont.woff') format('woff'),
+url('../data/fonts/akzidenzgroteskbe-cn-webfont.ttf') format('truetype'),
+url('../data/fonts/akzidenzgroteskbe-cn-webfont.svg#berthold_akzidenz_groteskCn') format('svg');
+font-weight: normal;
+font-style: normal;
+}
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+margin:0;
+padding:0;
+border:0;
+outline:0;
+font-size:100%;
+vertical-align:baseline;
+background:transparent;
+}
+html,
+body {
+background:#151515;
+color:#c5c5c5;
+width:100%;
+height:100%;
+}
+body {
+font-family: 'berthold_akzidenz_groteskCn';
+font-style: normal;
+font-size: 62.5%;
+overflow-y: auto;
+letter-spacing: 0.08em;
+background:transparent;
+ overflow-y:hidden;
+ overflow-x:hidden;
+ text-align:left;
+   cursor: none;
+}
+
+}
+#container {
+margin:0;
+padding:0;
+border:0;
+outline:0;
+width:100%;
+height:auto;
+cursor: none;
+display:block;
+-moz-box-sizing: content-box;
+-webkit-box-sizing: content-box;
+-ms-box-sizing: content-box;
+box-sizing: content-box;
+}
+img{
+margin:0;
+padding:0;
+border:0;
+outline:0;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-o-user-select: none;
+user-select: none;
+}
+.clearall{
+clear:both;
+}
+.noshow {
+opacity: 0;
+display:none;
+}
+
+h1 { 
+color: #bb1313;
+font-size: 1.5em;
+line-height: 1.0em;
+font-weight: normal;
+margin: 0px;
+text-transform:uppercase;
+}
+.green {
+color: #0fd600;
+}
+.darkgreen {
+color: #0a8c01;
+}
+.orange {
+color: #ff7200;
+}
+.white {
+color: #fff;
+}
+h2 { 
+color: #ccc;
+font-size: 2.5em;
+line-height: 1.0em;
+font-weight: normal;
+margin: 0px;
+text-transform:uppercase;
+}
+
+.butt { 
+margin: 0px;
+width:194px;
+height: 100px;
+font-size: 2em;
+line-height: 100px;
+padding:0;
+border:0;
+cursor: pointer !important;
+margin:0px 0px 5px 5px;
+display:block;
+float:left;
+outline:0;
+background:#bb1313 url('../data/img/corner.png') no-repeat top right;
+text-align:center;
+}
+
+.stream { 
+margin: 0px;
+width:393px;
+height: 205px;
+padding:0;
+border:0;
+cursor: pointer !important;
+margin:0px 0px 5px 5px;
+display:block;
+float:left;
+outline:0;
+background-color:#007f8a;
+text-align:center;
+}
+.stream img { 
+margin: 0px;
+width:100%;
+height: 100%;
+padding:0;
+border:0;
+cursor: none !important;
+margin:0;
+display:block;
+outline:0;
+background-color:#007f8a;
+text-align:center;
+   -webkit-touch-callout: none !important;
+   -webkit-user-select: none !important;
+   -khtml-user-select: none !important;
+   -moz-user-select: none !important;
+   -ms-user-select: none !important;
+   user-select: none !important;
+}
+
+
+@media screen and (max-width: 800px) {
+
+.stream { 
+margin: 0px;
+width:393px;
+height: 205px;
+padding:0;
+border:0;
+cursor: none !important;
+margin:0px 0px 5px 5px;
+display:block;
+float:left;
+outline:0;
+background-color:#007f8a;
+text-align:center;
+   -webkit-touch-callout: none !important;
+   -webkit-user-select: none !important;
+   -khtml-user-select: none !important;
+   -moz-user-select: none !important;
+   -ms-user-select: none !important;
+   user-select: none !important;
+}
+.stream img { 
+margin: 0px;
+width:100%;
+height: 100%;
+padding:0;
+border:0;
+cursor: none !important;
+margin:0;
+display:block;
+outline:0;
+background-color:#007f8a;
+text-align:center;
+   -webkit-touch-callout: none !important;
+   -webkit-user-select: none !important;
+   -khtml-user-select: none !important;
+   -moz-user-select: none !important;
+   -ms-user-select: none !important;
+   user-select: none !important;
+}
+
+.butt { 
+margin: 0px;
+width:194px;
+height: 100px;
+font-size: 2em;
+line-height: 100px;
+padding:0;
+border:0;
+cursor: none !important;
+margin:0px 0px 5px 5px;
+display:block;
+float:left;
+outline:0;
+background:#bb1313 url('../data/img/corner.png') no-repeat top right;
+text-align:center;
+   -webkit-touch-callout: none !important;
+   -webkit-user-select: none !important;
+   -khtml-user-select: none !important;
+   -moz-user-select: none !important;
+   -ms-user-select: none !important;
+   user-select: none !important;
+    }
+}
+
+#feedback {
+display:block;
+width:100%;
+padding:1%;
+margin:5px 0px 5px 5px;
+border:2px solid #bb1313;
+-moz-box-sizing: content-box;
+-webkit-box-sizing: content-box;
+-ms-box-sizing: content-box;
+box-sizing: content-box;
+font-size: 2em;
+line-height: 1.0em;
+font-weight: normal;
+text-transform:uppercase;
+color: #bb1313;
+background: #222;
+}
+
+</style>
+
+<script src="socket.io/socket.io.js"></script>
+
+</head>
+<body>
+
+<div id="container">
+
+<div id="feedback"><h1>Starting system...</h1></div>
+
+<a class="butt" id="relay5" onclick="relay(5);"> WORKSTATION </a> 
+<a class="butt" id="relay1" onclick="relay(1);"> NODE1 </a> 
+<a class="butt" id="relay2" onclick="relay(2);"> NODE2 </a> 
+<a class="butt" id="relay3" onclick="relay(3);"> NODE3 </a> 
+<a class="butt" id="relay4" onclick="relay(4);"> NODE4 </a>
+
+<a class="butt" id="relay6" onclick="relay(6);"> SERIAL1 </a>
+<a class="butt" id="relay7" onclick="relay(7);"> SERIAL2 </a>
+
+</div>
+
+<script>
+
+	var socket = io.connect();
+	var Feedback = document.getElementById("feedback");
+
+// EMIT ID TO BACKEND
+
+	function relay(data){
+		socket.emit('relaycmd', { value: data });
+	}
+
+
+// BUTTON ON/OFF STATUSSES
+
+	socket.on('relayCallback', function (data) {
+
+		var id = data.id
+       	var active = data.active
+
+	       	if (active == 1) {
+					if (id == 5) {
+						document.getElementById("relay" + id).style.backgroundColor = "#4e9c37";
+						Feedback.innerHTML = "<h1 class='feedbacking'>WORKSTATION ONLINE</h1>";
+					} else if (id == 6 || id == 7) {
+						document.getElementById("relay" + id).style.backgroundColor = "#4056d1";
+						Feedback.innerHTML = "<h1 class='feedbacking'>REMOTE SERIAL CALL ON</h1>";
+					} else {
+						document.getElementById("relay" + id).style.backgroundColor = "#10a620";
+						Feedback.innerHTML = "<h1 class='feedbacking'>Node "+id+" ON</h1>";
+					}
+
+			} else if (active == 0) {
+					document.getElementById("relay" + id).style.backgroundColor = "#bb1313";
+					if (id == 5) {
+						Feedback.innerHTML = "<h1 class='feedbacking'>WORKSTATION OFFLINE</h1>";
+					} else if (id == 6 || id == 7) {
+						Feedback.innerHTML = "<h1 class='feedbacking'>REMOTE SERIAL CALL OFF</h1>";
+					} else {
+						Feedback.innerHTML = "<h1 class='feedbacking'>Node "+id+" OFF</h1>";
+					}
+			}
+	});
+
+
+    
+
+</script></body>
+</html>
