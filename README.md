@@ -23,7 +23,7 @@ npm install express<br>
 npm install socket.io<br>
 
 #Wake on Lan:
-npm install [-g] wol --save
+npm install wake_on_lan
 
 #Ping:
 npm install ping
