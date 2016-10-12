@@ -35,12 +35,9 @@ var sp = new SerialPort('/dev/ttyAMA0', { baudrate: 9600 }, function (err) {
 
 io.sockets.on('connection', function (socket) {
 
+// LOCAL GPIO RELAYS
 
-var pingstatus = true;
-var message = "statuscall";  
-
-
-// FIRST EMIT ACTUAL GPIO STATES TO CLIENT ON CONNECT
+  // FIRST EMIT ACTUAL GPIO STATES TO CLIENT ON CONNECT
 
    if (relay1.digitalRead() == 1) {
                 io.sockets.emit('relayCallback', {id: 1, active: 1});
@@ -63,85 +60,109 @@ var message = "statuscall";
                 io.sockets.emit('relayCallback', {id: 4, active: 0});
             }
 
-// PING WORKSTATION/HOSTS
-// CAN USE MULTIPLE HOSTS/IPs IN ARRAY var hosts = ['10.0.0.30', '10.0.0.1'];
-// CHECKS FOR PINGSTATUS
 
-function pings() {
-var hosts = ['10.0.0.30'];
-hosts.forEach(function(host){
+// PING WORKSTATION/HOSTS FUNCTION
+
+var pingstatus = {};
+
+function pings(host, id) {
+
     ping.sys.probe(host, function(isAlive){
-        if ((isAlive == true) && (pingstatus == true)) {
-          io.sockets.emit('relayCallback', {id: 5, active: 1});
-          pingstatus = false;
-        } else if ((isAlive == false) && (pingstatus == false)){
-          io.sockets.emit('relayCallback', {id: 5, active: 1});
-          pingstatus = true;
+
+        // Set initial pinstatus on init
+        if ((pingstatus['pingstatus' + id] !== false) && (pingstatus['pingstatus' + id] !== true)) {
+          pingstatus['pingstatus' + id] = true;
+        }
+
+        // Only send relayCallback with active status if pingstatus has changed
+        if ((isAlive == true) && (pingstatus['pingstatus' + id] == true)) {
+          io.sockets.emit('relayCallback', {id: id, active: 1});
+          pingstatus['pingstatus' + id] = false;
+        } else if ((isAlive == false) && (pingstatus['pingstatus' + id] == false)){
+          io.sockets.emit('relayCallback', {id: id, active: 0});
+          pingstatus['pingstatus' + id] = true;
         }
     });
-});
+
 }
 
-// RUN PING WHEN CLIENT CONNECT TO UPDATE BUTTON STATUS
-pings();
 
-// SET PING INTERVAL FOR ALL CLIENTS
-setInterval(function(){pings();}, 5000);  
+// SET PING INTERVAL FOR ALL CLIENTS (ip, buttonID)
+setInterval(function(){
+  pings('10.0.0.30', '5');
+  pings('10.0.0.31', '6');
+  pings('10.0.0.11', '7');
+}, 5000);  
 
 
 // ON CLIENT BUTTON PRESS RECEIVING SOCKET
 
   socket.on('relaycmd', function (data) { 
 
-      console.log(data.value);
+    console.log(data.value);
+
+    //GPIO LOCAL RELAYS
 
         if (data.value == 1) {
-        relay1.digitalWrite(relay1.digitalRead() ^ 1);
-            if (relay1.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: data.value, active: 1});
-            } else {
-                io.sockets.emit('relayCallback', {id: data.value, active: 0});
-            }
+            relay1.digitalWrite(relay1.digitalRead() ^ 1);
+              if (relay1.digitalRead() == 1) {
+                  io.sockets.emit('relayCallback', {id: data.value, active: 1});
+              } else {
+                  io.sockets.emit('relayCallback', {id: data.value, active: 0});
+              }
         } else if (data.value == 2) {
-        relay2.digitalWrite(relay2.digitalRead() ^ 1);
-            if (relay2.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: data.value, active: 1});
-            } else {
-                io.sockets.emit('relayCallback', {id: data.value, active: 0});
-            }
+            relay2.digitalWrite(relay2.digitalRead() ^ 1);
+              if (relay2.digitalRead() == 1) {
+                  io.sockets.emit('relayCallback', {id: data.value, active: 1});
+              } else {
+                  io.sockets.emit('relayCallback', {id: data.value, active: 0});
+              }
         } else if (data.value == 3) {
-        relay3.digitalWrite(relay3.digitalRead() ^ 1);
-            if (relay3.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: data.value, active: 1});
-            } else {
-                io.sockets.emit('relayCallback', {id: data.value, active: 0});
-            }
+            relay3.digitalWrite(relay3.digitalRead() ^ 1);
+              if (relay3.digitalRead() == 1) {
+                  io.sockets.emit('relayCallback', {id: data.value, active: 1});
+              } else {
+                  io.sockets.emit('relayCallback', {id: data.value, active: 0});
+              }
         } else if (data.value == 4) {
-        relay4.digitalWrite(relay4.digitalRead() ^ 1);
-            if (relay4.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: data.value, active: 1});
-            } else {
-                io.sockets.emit('relayCallback', {id: data.value, active: 0});
-            }
+            relay4.digitalWrite(relay4.digitalRead() ^ 1);
+              if (relay4.digitalRead() == 1) {
+                  io.sockets.emit('relayCallback', {id: data.value, active: 1});
+              } else {
+                  io.sockets.emit('relayCallback', {id: data.value, active: 0});
+              }
+
+
+    // WAKE ON LAN
+
+        // WORKSTATION 1
         } else if (data.value == 5) {
             console.log("Wake on Lan 6C:F0:49:E6:73:EB");
             wol.wake('6C:F0:49:E6:73:EB');
             io.sockets.emit('relayCallback', {id: data.value, active: 3});
-            
-            function pingstatusreset(){
-              pingstatus = true;
-            }
 
-            setTimeout(pingstatusreset, 3000);
-
-
-        // SERIAL REMOTES HC12 TRANSPONDERS
-
+        // WORKSTATION 2
         } else if (data.value == 6) {
+            console.log("Wake on Lan 6C:F0:49:E6:73:EB");
+            wol.wake('6C:F0:49:E6:73:EB');
+            io.sockets.emit('relayCallback', {id: data.value, active: 3});
+
+        // MEDIA PI
+        } else if (data.value == 7) {
+            console.log("Wake on Lan B8:27:EB:28:E2:2E");
+            wol.wake('B8:27:EB:28:E2:2E');
+            io.sockets.emit('relayCallback', {id: data.value, active: 3});
+
+
+
+
+    // SERIAL REMOTE HC12 TRANSPONDERS
+
+        } else if (data.value == 8) {
             write("seriallight1on");
             io.sockets.emit('relayCallback', {id: data.value, active: 1});
 
-        } else if (data.value == 7) {
+        } else if (data.value == 9) {
             write("seriallight2off");
             io.sockets.emit('relayCallback', {id: data.value, active: 1});
           }
@@ -158,8 +179,6 @@ setInterval(function(){pings();}, 5000);
           });
         }
 
-
-
    });
 
 
@@ -168,7 +187,6 @@ setInterval(function(){pings();}, 5000);
 });
 
 console.log("running");
-
 
 
 // NODE EXIT HANDLER

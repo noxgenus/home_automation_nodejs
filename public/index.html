@@ -279,14 +279,17 @@ background: #222;
 
 <div id="feedbackholder"><h1 class="prefix">Last status message: </h1><span id="feedback"><h1>Starting system...</h1></span></div>
 
-<a class="butt" id="relay5" onclick="relay(5);"> WORKSTATION </a> 
+<a class="butt" id="relay5" onclick="relay(5);"> WORKSTATION 1</a> 
+<a class="butt" id="relay6" onclick="relay(6);"> WORKSTATION 2 </a> 
+<a class="butt" id="relay7" onclick="relay(7);"> MEDIA PI2 </a> 
+
 <a class="butt" id="relay1" onclick="relay(1);"> NODE1 </a> 
 <a class="butt" id="relay2" onclick="relay(2);"> NODE2 </a> 
 <a class="butt" id="relay3" onclick="relay(3);"> NODE3 </a> 
 <a class="butt" id="relay4" onclick="relay(4);"> NODE4 </a>
 
-<a class="butt" id="relay6" onclick="relay(6);"> SERIAL1 </a>
-<a class="butt" id="relay7" onclick="relay(7);"> SERIAL2 </a>
+<a class="butt" id="relay8" onclick="relay(8);"> SERIAL1 </a>
+<a class="butt" id="relay9" onclick="relay(9);"> SERIAL2 </a>
 
 </div>
 
@@ -309,34 +312,38 @@ background: #222;
 		var id = data.id
        	var active = data.active
 
-       	// ON
+    // ON
 	       	if (active == 1) {
-					if (id == 5) {
+					if (id == 5 || id == 6 || id == 7) {
 						document.getElementById("relay" + id).style.backgroundColor = "#4e9c37";
 						Feedback.innerHTML = "<h1>WORKSTATION ONLINE</h1>";
-					} else if (id == 6 || id == 7) {
+					} else if (id == 8 || id == 9) {
 						document.getElementById("relay" + id).style.backgroundColor = "#4056d1";
 						Feedback.innerHTML = "<h1>REMOTE SERIAL CALL ON</h1>";
 					} else {
 						document.getElementById("relay" + id).style.backgroundColor = "#10a620";
 						Feedback.innerHTML = "<h1>Node "+id+" ON</h1>";
 					}
-		// OFF
+
+	// OFF
 			} else if (active == 0) {
 					document.getElementById("relay" + id).style.backgroundColor = "#bb1313";
-					if (id == 5) {
+
+				// WAKE ON LAN BUTTONS
+					if (id == 5 || id == 6 || id == 7) {
 						Feedback.innerHTML = "<h1>WORKSTATION OFFLINE</h1>";
-					} else if (id == 6 || id == 7) {
+				// SERIAL BUTTONS
+					} else if (id == 8 || id == 9) {
 						Feedback.innerHTML = "<h1>REMOTE SERIAL CALL OFF</h1>";
+				// RELAY BUTTONS
 					} else {
 						Feedback.innerHTML = "<h1>Node "+id+" OFF</h1>";
 					}
-		// TEMP BOOTING
+
+	// TEMP BOOTING WAKEONLAN STATUS
 			} else if (active == 3) {			
-					if (id == 5) {
-						Feedback.innerHTML = "<h1>WORKSTATION BOOTING</h1>";
+						Feedback.innerHTML = "<h1>COMPUTER BOOTING</h1>";
 						document.getElementById("relay" + id).style.backgroundColor = "#9b59a8";
-					}
 			}
 	});
 
