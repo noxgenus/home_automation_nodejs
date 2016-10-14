@@ -7,6 +7,7 @@ server.listen(8080);
 app.use(express.static('public'));      
 
 // PIGPIO SET GPIO PINS AND OUTPUT MODE
+// -------------------------------------------------------------------------------
 
 var Gpio = require('pigpio').Gpio,
   relay1 = new Gpio(21, {mode: Gpio.OUTPUT}),
@@ -15,12 +16,15 @@ var Gpio = require('pigpio').Gpio,
   relay4 = new Gpio(19, {mode: Gpio.OUTPUT});
 
 // WAKE ON LAN
+// -------------------------------------------------------------------------------
 var wol = require('wake_on_lan');
 
 //PING UNDER ROOT
+// -------------------------------------------------------------------------------
 var ping = require('ping');
 
 // SERIAL REMOTES
+// -------------------------------------------------------------------------------
 
 var SerialPort = require("serialport");
 
@@ -32,12 +36,15 @@ var sp = new SerialPort('/dev/ttyAMA0', { baudrate: 9600 }, function (err) {
 
 
 // START SOCKET.IO CONNECTIONS
+// -------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
 
 io.sockets.on('connection', function (socket) {
 
 // LOCAL GPIO RELAYS
+// -------------------------------------------------------------------------------
 
-  // FIRST EMIT ACTUAL GPIO STATES TO CLIENT ON CONNECT
+// FIRST EMIT ACTUAL GPIO STATES TO CLIENT ON CONNECT
 
    if (relay1.digitalRead() == 1) {
                 io.sockets.emit('relayCallback', {id: 1, active: 1});
@@ -61,7 +68,8 @@ io.sockets.on('connection', function (socket) {
             }
 
 
-// PING WORKSTATION/HOSTS FUNCTION
+// PING WORKSTATION/HOSTS FUNCTIONS
+// -------------------------------------------------------------------------------
 
 var pingstatus = {};
 
@@ -69,12 +77,14 @@ function pings(host, id) {
 
     ping.sys.probe(host, function(isAlive){
 
-        // Set initial pinstatus on init
+// Set initial pinstatus on init
+
         if ((pingstatus['pingstatus' + id] !== false) && (pingstatus['pingstatus' + id] !== true)) {
           pingstatus['pingstatus' + id] = true;
         }
 
-        // Only send relayCallback with active status if pingstatus has changed
+// Only send relayCallback with active status if pingstatus has changed
+
         if ((isAlive == true) && (pingstatus['pingstatus' + id] == true)) {
           io.sockets.emit('relayCallback', {id: id, active: 1});
           pingstatus['pingstatus' + id] = false;
@@ -88,20 +98,38 @@ function pings(host, id) {
 
 
 // SET PING INTERVAL FOR ALL CLIENTS (ip, buttonID)
-setInterval(function(){
+
+function pingall(){
   pings('10.0.0.30', '5');
   pings('10.0.0.31', '6');
   pings('10.0.0.11', '7');
-}, 5000);  
+};  
+
+// INTERVAL PING
+
+var pinginterval = setInterval(pingall, 5000);
+
+// PINGHALT FOR WAKEONLAN
+
+function pinghalt(time){
+    clearInterval(pinginterval);
+    pingstatus = {};
+    setTimeout(function(){
+      pinginterval = setInterval(pingall, time);
+    }, 4000);
+}
 
 
 // ON CLIENT BUTTON PRESS RECEIVING SOCKET
+// -------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
 
   socket.on('relaycmd', function (data) { 
 
-    console.log(data.value);
+    console.log('Relay:' + data.value);
 
-    //GPIO LOCAL RELAYS
+// GPIO LOCAL RELAYS
+// -------------------------------------------------------------------------------
 
         if (data.value == 1) {
             relay1.digitalWrite(relay1.digitalRead() ^ 1);
@@ -133,30 +161,39 @@ setInterval(function(){
               }
 
 
-    // WAKE ON LAN
+// WAKE ON LAN
+// -------------------------------------------------------------------------------
 
-        // WORKSTATION 1
+
+
+    // WORKSTATION 1
         } else if (data.value == 5) {
             console.log("Wake on Lan 6C:F0:49:E6:73:EB");
             wol.wake('6C:F0:49:E6:73:EB');
             io.sockets.emit('relayCallback', {id: data.value, active: 3});
+            pinghalt(5000);
 
-        // WORKSTATION 2
+
+    // WORKSTATION 2
         } else if (data.value == 6) {
             console.log("Wake on Lan 6C:F0:49:E6:73:EB");
             wol.wake('6C:F0:49:E6:73:EB');
             io.sockets.emit('relayCallback', {id: data.value, active: 3});
+            pinghalt(5000);
 
-        // MEDIA PI
+    // MEDIA PI
         } else if (data.value == 7) {
             console.log("Wake on Lan B8:27:EB:28:E2:2E");
             wol.wake('B8:27:EB:28:E2:2E');
             io.sockets.emit('relayCallback', {id: data.value, active: 3});
+            pinghalt(5000);
 
 
 
 
-    // SERIAL REMOTE HC12 TRANSPONDERS
+// SERIAL REMOTE HC12 TRANSPONDERS (NOT FINISHED)
+// -------------------------------------------------------------------------------
+
 
         } else if (data.value == 8) {
             write("seriallight1on");
@@ -183,6 +220,8 @@ setInterval(function(){
 
 
 // CLOSE SHIT
+// -------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
 
 });
 
@@ -190,6 +229,8 @@ console.log("running");
 
 
 // NODE EXIT HANDLER
+// -------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
 
 process.stdin.resume();
 
