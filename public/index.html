@@ -340,9 +340,12 @@ background: #222;
 						Feedback.innerHTML = "<h1>Node "+id+" OFF</h1>";
 					}
 
-	// TEMP BOOTING WAKEONLAN STATUS
+	// TEMP BOOTING WAKEONLAN/SERIAL STATUS 
 			} else if (active == 3) {			
 						Feedback.innerHTML = "<h1>COMPUTER BOOTING</h1>";
+						document.getElementById("relay" + id).style.backgroundColor = "#9b59a8";
+			} else if (active == 4) {			
+						Feedback.innerHTML = "<h1>SERIAL " + id + " </h1>";
 						document.getElementById("relay" + id).style.backgroundColor = "#9b59a8";
 			}
 	});

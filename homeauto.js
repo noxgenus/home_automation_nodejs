@@ -23,16 +23,45 @@ var wol = require('wake_on_lan');
 // -------------------------------------------------------------------------------
 var ping = require('ping');
 
-// SERIAL REMOTES
+// SERIAL SETUP
 // -------------------------------------------------------------------------------
 
 var SerialPort = require("serialport");
+var parsers = SerialPort.parsers;
 
-var sp = new SerialPort('/dev/ttyAMA0', { baudrate: 9600 }, function (err) {
+var sp = new SerialPort('/dev/ttyAMA0', { 
+baudrate: 9600, 
+parser: parsers.readline('\r\n')
+}, function (err) {
   if (err) {
     return console.log('Error: ', err.message);
   }
 });
+
+// SERIAL PORT RECEIVE
+// -------------------------------------------------------------------------------
+
+// OPEN PORT
+sp.open(function(err) {
+  if (err) {
+      console.log(err);
+      }
+});
+
+// CHECK IF OPEN
+sp.on('open', function() {
+  console.log('Port open');
+});
+
+// ON INCOMING DATA
+sp.on('data', function(data) {
+  console.log("Receiving Serial Data: " + data);
+  var serialdata = data.split('~');
+    var serialid = serialdata[0];
+    var serialactive = serialdata[1];
+      io.sockets.emit('relayCallback', {id: serialid, active: serialactive});
+});
+
 
 
 // START SOCKET.IO CONNECTIONS
@@ -40,6 +69,17 @@ var sp = new SerialPort('/dev/ttyAMA0', { baudrate: 9600 }, function (err) {
 // -------------------------------------------------------------------------------
 
 io.sockets.on('connection', function (socket) {
+
+
+      // ASK STATUS FROM SERIAL TRANSPONDERS
+
+
+    sp.write("status\r", function(err, res) {
+              if (err) {
+                    console.log(err);
+              }
+            });
+
 
 // LOCAL GPIO RELAYS
 // -------------------------------------------------------------------------------
@@ -120,6 +160,9 @@ function pinghalt(time){
 }
 
 
+
+
+
 // ON CLIENT BUTTON PRESS RECEIVING SOCKET
 // -------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------
@@ -196,26 +239,30 @@ function pinghalt(time){
 
 
         } else if (data.value == 8) {
-            write("seriallight1on");
-            io.sockets.emit('relayCallback', {id: data.value, active: 1});
+            write(data.value + "\r");
+            io.sockets.emit('relayCallback', {id: data.value, active: 4});
 
         } else if (data.value == 9) {
-            write("seriallight2off");
-            io.sockets.emit('relayCallback', {id: data.value, active: 1});
-          }
+            write(data.value + "\r");
+            io.sockets.emit('relayCallback', {id: data.value, active: 4});
+        }
+
         
         function write(message) {
-          sp.open(function(err) {
-            console.log("Writing serial data: " + message);
+            console.log("Sending Serial Data: " + message);
             sp.write(message, function(err, res) {
               if (err) {
                     console.log(err);
               }
-              sp.close();
-            });
           });
         }
 
+
+
+
+
+
+// CLOSE RELAYCMD
    });
 
 
