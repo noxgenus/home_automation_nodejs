@@ -1,9 +1,9 @@
 
 /* 
 
-REMOTE NO 1
+REMOTE PAIR: 8/9
 
-Serial 433MHz Relay Remote V1.0
+Serial 433MHz Relay Remote V1.1
 -----------------------
 By Victor Winters 2016
 
@@ -19,12 +19,11 @@ Unit Hardware:
 
 */
 
-String readString;
-
 // PINS
 int relay1 = 7;
 int relay2 = 8;
 
+String str;
 
 void setup() {
     Serial.begin(9600);
@@ -38,20 +37,13 @@ void setup() {
 
 
 void loop() {
+  
+    if(Serial.available() > 0) {
+        str = Serial.readStringUntil('\n');
+   
+      
 
-     char incomingByte;
-     
-     while (Serial.available()>0) {
-     delay(10);
-     incomingByte = Serial.read();
-     readString +=incomingByte;
-     }
-    
-   if(readString != "") {
-       
-    // Serial.println(readString);
-     
-         if (readString == "8") {
+         if (str == "8") {
                     if (digitalRead(relay1) == HIGH){
                         digitalWrite(relay1, LOW);
                         Serial.println("8~0");
@@ -61,7 +53,7 @@ void loop() {
                         Serial.println("8~1");
                         
                     }    
-         } else if (readString == "9") {
+         } else if (str == "9") {
                     if (digitalRead(relay2) == HIGH){
                         digitalWrite(relay2, LOW);
                         Serial.println("9~0");
@@ -70,14 +62,29 @@ void loop() {
                         digitalWrite(relay2, HIGH);
                         Serial.println("9~1");
                     }
+
+        } else if (str == "status") {
+                    if (digitalRead(relay1) == HIGH){
+                        Serial.println("8~1");
+                    } else if (digitalRead(relay1) == LOW) {
+                        Serial.println("8~0");    
+                    }
+                     
+                    if (digitalRead(relay2) == HIGH) {
+                        Serial.println("9~1");
+                    } else if (digitalRead(relay2) == LOW) {
+                        Serial.println("9~0");
+                    } 
                   
          } else {
-              //Serial.println("Unknown Command");
+             // Serial.println("Unknown Command for Serial Node 8/9");
          }
-   }
-       
-  readString = "";
+        delay(10);
+    }
 
 
-  }
+// END VOID LOOP
+}
+
+
   
