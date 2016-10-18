@@ -34,7 +34,7 @@ baudrate: 9600,
 parser: parsers.readline('\r\n')
 }, function (err) {
   if (err) {
-    return console.log('Error: ', err.message);
+    return console.log(err.message);
   }
 });
 
@@ -70,15 +70,18 @@ sp.on('data', function(data) {
 
 io.sockets.on('connection', function (socket) {
 
+// PING WORKSTATIONS
 
-      // ASK STATUS FROM SERIAL TRANSPONDERS
+pingall();
 
 
-    sp.write("status\n", function(err, res) {
-              if (err) {
-                    console.log(err);
-              }
-            });
+// STATUS CALL FROM SERIAL TRANSPONDERS
+
+sp.write("status\n", function(err, res) {
+  if (err) {
+    console.log(err);
+    }
+});
 
 
 // LOCAL GPIO RELAYS
