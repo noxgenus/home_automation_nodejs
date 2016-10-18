@@ -72,25 +72,12 @@ void loop() {
                     }
                   
          } else {
-              Serial.println("Unknown Command");
+              //Serial.println("Unknown Command");
          }
    }
        
   readString = "";
 
-/*
-int x;
-String str;
-
-void loop() 
-{
-    if(Serial.available() > 0)
-    {
-        str = Serial.readStringUntil('\n');
-        x = Serial.parseInt();
-    }
-}
-*/
 
   }
   

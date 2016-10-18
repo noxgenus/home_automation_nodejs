@@ -22,7 +22,7 @@ Unit Hardware:
 // PINS
 int relay1 = 7;
 int relay2 = 8;
-int node;
+
 String str;
 
 void setup() {
@@ -40,7 +40,8 @@ void loop() {
   
     if(Serial.available() > 0) {
         str = Serial.readStringUntil('\n');
-        node = Serial.parseInt();
+   
+      
 
          if (str == "8") {
                     if (digitalRead(relay1) == HIGH){
@@ -64,29 +65,27 @@ void loop() {
 
         } else if (str == "status") {
                     if (digitalRead(relay1) == HIGH){
-                        digitalWrite(relay1, LOW);
-                        Serial.println("8~0");
-                        
-                    } else if (digitalRead(relay1) == LOW) {
-                        digitalWrite(relay1, HIGH);
                         Serial.println("8~1");
                         
+                    } else if (digitalRead(relay1) == LOW) {
+                        Serial.println("8~0");
+                        
                     } else if (digitalRead(relay2) == HIGH) {
-                        digitalWrite(relay2, LOW);
-                        Serial.println("9~0");
+                        Serial.println("9~1");
                     
                     } else if (digitalRead(relay2) == LOW) {
-                        digitalWrite(relay2, HIGH);
-                        Serial.println("9~1");
+                        Serial.println("9~0");
                     } 
                   
          } else {
-              Serial.println("Unknown Command for Serial Node 8/9");
+             // Serial.println("Unknown Command for Serial Node 8/9");
          }
-        
+        //delay(10);
     }
 
 
 // END VOID LOOP
 }
+
+
   
