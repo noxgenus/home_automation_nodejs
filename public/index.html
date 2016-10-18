@@ -319,7 +319,7 @@ background: #222;
 						Feedback.innerHTML = "<h1>WORKSTATION ONLINE</h1>";
 					} else if (id == 8 || id == 9) {
 						document.getElementById("relay" + id).style.backgroundColor = "#4056d1";
-						Feedback.innerHTML = "<h1>REMOTE SERIAL CALL ON</h1>";
+						Feedback.innerHTML = "<h1>REMOTE SERIAL "+id+" CALL ON</h1>";
 					} else {
 						document.getElementById("relay" + id).style.backgroundColor = "#10a620";
 						Feedback.innerHTML = "<h1>Node "+id+" ON</h1>";
@@ -334,10 +334,10 @@ background: #222;
 						Feedback.innerHTML = "<h1>WORKSTATION OFFLINE</h1>";
 				// SERIAL BUTTONS
 					} else if (id == 8 || id == 9) {
-						Feedback.innerHTML = "<h1>REMOTE SERIAL CALL OFF</h1>";
+						Feedback.innerHTML = "<h1>REMOTE SERIAL "+id+" CALL OFF</h1>";
 				// RELAY BUTTONS
 					} else {
-						Feedback.innerHTML = "<h1>Node "+id+" OFF</h1>";
+						Feedback.innerHTML = "<h1>NODE "+id+" OFF</h1>";
 					}
 
 	// TEMP BOOTING WAKEONLAN/SERIAL STATUS 

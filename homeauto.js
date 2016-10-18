@@ -74,7 +74,7 @@ io.sockets.on('connection', function (socket) {
       // ASK STATUS FROM SERIAL TRANSPONDERS
 
 
-    sp.write("status\r", function(err, res) {
+    sp.write("status\n", function(err, res) {
               if (err) {
                     console.log(err);
               }
@@ -239,11 +239,11 @@ function pinghalt(time){
 
 
         } else if (data.value == 8) {
-            write(data.value + "\r");
+            write(data.value + "\n");
             io.sockets.emit('relayCallback', {id: data.value, active: 4});
 
         } else if (data.value == 9) {
-            write(data.value + "\r");
+            write(data.value + "\n");
             io.sockets.emit('relayCallback', {id: data.value, active: 4});
         }
 
