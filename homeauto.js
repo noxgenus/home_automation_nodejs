@@ -70,7 +70,7 @@ sp.on('data', function(data) {
 
 io.sockets.on('connection', function (socket) {
 
-// PING WORKSTATIONS
+// STATUS PING WORKSTATIONS
 
 pingall();
 

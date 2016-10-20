@@ -7,12 +7,9 @@
 		
 <style>
 
-
 *{ 
 margin:0; 
 padding:0; 
--webkit-user-select: none !important;
-  cursor: none !important;
 }
 @font-face {
 font-family: 'berthold_akzidenz_groteskCn';
@@ -58,26 +55,36 @@ font-size: 62.5%;
 overflow-y: auto;
 letter-spacing: 0.08em;
 background:transparent;
- overflow-y:hidden;
- overflow-x:hidden;
- text-align:left;
-   cursor: none;
-}
-
+text-align:left;
 }
 #container {
 margin:0;
-padding:0;
+padding: 5px 5px 0 5px;
 border:0;
 outline:0;
 width:100%;
 height:auto;
-cursor: none;
 display:block;
--moz-box-sizing: content-box;
--webkit-box-sizing: content-box;
--ms-box-sizing: content-box;
-box-sizing: content-box;
+box-sizing: border-box;
+}
+#topholder {
+width:100%;
+display:block;
+margin:0;
+padding:0;
+border:0;
+position:relative;
+box-sizing: border-box;
+}
+#holder {
+width:100%;
+display:block;
+background:#151515;
+position:relative;
+margin:0;
+padding:0;
+border:0;
+box-sizing: border-box;
 }
 img{
 margin:0;
@@ -141,7 +148,7 @@ line-height: 100px;
 padding:0;
 border:0;
 cursor: pointer !important;
-margin:0px 0px 5px 5px;
+margin:0px 5px 5px 0px;
 display:block;
 float:left;
 outline:0;
@@ -154,17 +161,18 @@ margin: 0px;
 width:393px;
 height: 205px;
 padding:0;
-border:0;
-cursor: pointer !important;
-margin:0px 0px 5px 5px;
+border:2px solid #4292f4;
+cursor: none !important;
+margin:0px 5px 5px 0px;
 display:block;
 float:left;
 outline:0;
 background-color:#007f8a;
 text-align:center;
+box-sizing: border-box;
 }
+
 .stream img { 
-margin: 0px;
 width:100%;
 height: 100%;
 padding:0;
@@ -175,6 +183,43 @@ display:block;
 outline:0;
 background-color:#007f8a;
 text-align:center;
+-webkit-touch-callout: none !important;
+-webkit-user-select: none !important;
+-khtml-user-select: none !important;
+-moz-user-select: none !important;
+-ms-user-select: none !important;
+user-select: none !important;
+}
+
+#feedbackholder {
+display:block;
+width:100%;
+padding:10px;
+margin:0 0 5px 0;
+border:2px solid #4292f4;
+box-sizing: border-box;
+font-size: 2em;
+line-height: 1.0em;
+font-weight: normal;
+text-transform:uppercase;
+color: #c5c5c5;
+background: #222;
+}
+
+
+
+@media screen and (max-width: 800px) {
+
+body {
+font-family: 'berthold_akzidenz_groteskCn';
+font-style: normal;
+font-size: 62.5%;
+overflow-y: hidden;
+overflow-x: hidden;
+letter-spacing: 0.08em;
+background:transparent;
+text-align:left;
+cursor: none !important;
    -webkit-touch-callout: none !important;
    -webkit-user-select: none !important;
    -khtml-user-select: none !important;
@@ -182,10 +227,17 @@ text-align:center;
    -ms-user-select: none !important;
    user-select: none !important;
 }
-
-
-@media screen and (max-width: 800px) {
-
+#container {
+margin:0;
+padding: 5px 4px 0 4px;
+border:0;
+outline:0;
+width:100%;
+height:auto;
+display:block;
+cursor: none !important;
+box-sizing: border-box;
+}
 .stream { 
 margin: 0px;
 width:393px;
@@ -235,7 +287,7 @@ line-height: 100px;
 padding:0;
 border:0;
 cursor: none !important;
-margin:0px 0px 5px 5px;
+margin:0px 5px 5px 0px;
 display:block;
 float:left;
 outline:0;
@@ -248,18 +300,18 @@ text-align:center;
    -ms-user-select: none !important;
    user-select: none !important;
     }
+
+.butt:nth-child(4n+4) {
+   margin:0px 0px 5px 0px; 
 }
 
 #feedbackholder {
 display:block;
 width:100%;
-padding:1%;
-margin:5px 0px 5px 5px;
+padding:10px;
+margin:0 5px 5px 0;
 border:2px solid #4292f4;
--moz-box-sizing: content-box;
--webkit-box-sizing: content-box;
--ms-box-sizing: content-box;
-box-sizing: content-box;
+box-sizing: border-box;
 font-size: 2em;
 line-height: 1.0em;
 font-weight: normal;
@@ -268,6 +320,160 @@ color: #c5c5c5;
 background: #222;
 }
 
+}
+
+
+@media screen and (max-width: 380px) {
+
+*{ 
+margin:0; 
+padding:0; 
+-webkit-user-select: none !important;
+cursor: none !important;
+}
+
+body {
+font-family: 'berthold_akzidenz_groteskCn';
+font-style: normal;
+font-size: 62.5%;
+overflow-y: hidden;
+overflow-x: hidden;
+letter-spacing: 0.08em;
+background:transparent;
+text-align:left;
+cursor: none;
+
+}
+#container {
+margin:0;
+padding: 10px 10px 0 10px;
+border:0;
+outline:0;
+width:100%;
+height:100%;
+cursor: none !important;
+display: flex;
+flex-flow: column;
+box-sizing: border-box;
+}
+
+#topholder {
+width:100%;
+display:block;
+margin:0;
+padding:0;
+border:0;
+box-sizing: border-box;
+}
+
+#holder {
+position:relative;
+width:100%;
+flex: 1 1 auto;
+margin:0;
+padding:0;
+border:0;
+box-sizing: border-box;
+height:100%;
+overflow-x:hidden;
+}
+
+img{
+margin:0;
+padding:0;
+border:0;
+outline:0;
+cursor: none !important;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-o-user-select: none;
+user-select: none;
+}
+
+.stream { 
+margin: 0px;
+width:100%;
+height: auto;
+padding:0;
+border:2px solid #4292f4;
+cursor: none !important;
+margin:0 0 10px 0;
+display:block;
+outline:0;
+background-color:#007f8a;
+text-align:center;
+box-sizing: border-box;
+-webkit-touch-callout: none !important;
+-webkit-user-select: none !important;
+-khtml-user-select: none !important;
+-moz-user-select: none !important;
+-ms-user-select: none !important;
+user-select: none !important;
+}
+
+.stream img { 
+margin: 0px;
+width:100%;
+height: 100%;
+padding:0;
+border:0;
+cursor: none !important;
+margin:0;
+display:block;
+outline:0;
+background-color:#007f8a;
+text-align:center;
+-webkit-touch-callout: none !important;
+-webkit-user-select: none !important;
+-khtml-user-select: none !important;
+-moz-user-select: none !important;
+-ms-user-select: none !important;
+user-select: none !important;
+}
+
+.butt { 
+margin: 0px;
+width:100%;
+height: 100px;
+font-size: 3em;
+line-height: 100px;
+padding:0;
+border:0;
+cursor: none !important;
+margin:0 0 10px 0;
+display:block;
+outline:0;
+background:#bb1313 url('../data/img/corner.png') no-repeat top right;
+text-align:center;
+-webkit-touch-callout: none !important;
+-webkit-user-select: none !important;
+-khtml-user-select: none !important;
+-moz-user-select: none !important;
+-ms-user-select: none !important;
+user-select: none !important;
+}
+.butt:nth-child(4n+4) {
+   margin:0px 0px 10px 0px; 
+}
+
+#feedbackholder {
+display:block;
+width:100%;
+padding:10px;
+margin:0 0 10px 0;
+border:2px solid #4292f4;
+box-sizing: border-box;
+font-size: 2em;
+line-height: 1.0em;
+font-weight: normal;
+text-transform:uppercase;
+color: #c5c5c5;
+background: #222;
+}
+
+
+}
 </style>
 
 <script src="socket.io/socket.io.js"></script>
@@ -277,19 +483,27 @@ background: #222;
 
 <div id="container">
 
-<div id="feedbackholder"><h1 class="prefix">Last status message: </h1><span id="feedback"><h1>Starting system...</h1></span></div>
+	<div id="topholder">
 
-<a class="butt" id="relay5" onclick="relay(5);"> WORKSTATION 1</a> 
-<a class="butt" id="relay6" onclick="relay(6);"> WORKSTATION 2 </a> 
-<a class="butt" id="relay7" onclick="relay(7);"> MEDIA PI2 </a> 
+		<div id="feedbackholder"><h1 class="prefix">Last status message: </h1><span id="feedback"><h1>No Connection with back-end</h1></span></div>
 
-<a class="butt" id="relay1" onclick="relay(1);"> NODE1 </a> 
-<a class="butt" id="relay2" onclick="relay(2);"> NODE2 </a> 
-<a class="butt" id="relay3" onclick="relay(3);"> NODE3 </a> 
-<a class="butt" id="relay4" onclick="relay(4);"> NODE4 </a>
+	</div>
 
-<a class="butt" id="relay8" onclick="relay(8);"> SERIAL1 </a>
-<a class="butt" id="relay9" onclick="relay(9);"> SERIAL2 </a>
+	<div id="holder">
+
+		<div class="butt" id="relay5" onclick="relay(5);"> WORKSTATION 1</div> 
+		<div class="butt" id="relay6" onclick="relay(6);"> WORKSTATION 2 </div> 
+		<div class="butt" id="relay7" onclick="relay(7);"> MEDIA PI2 </div> 
+
+		<div class="butt" id="relay1" onclick="relay(1);"> NODE1 </div> 
+		<div class="butt" id="relay2" onclick="relay(2);"> NODE2 </div> 
+		<div class="butt" id="relay3" onclick="relay(3);"> NODE3 </div> 
+		<div class="butt" id="relay4" onclick="relay(4);"> NODE4 </div>
+
+		<div class="butt" id="relay8" onclick="relay(8);"> SERIAL1 </div>
+		<div class="butt" id="relay9" onclick="relay(9);"> SERIAL2 </div>
+
+	</div>
 
 </div>
 
