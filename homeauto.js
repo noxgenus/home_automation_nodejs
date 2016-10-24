@@ -23,6 +23,7 @@ var wol = require('wake_on_lan');
 // -------------------------------------------------------------------------------
 var ping = require('ping');
 
+
 // SERIAL SETUP
 // -------------------------------------------------------------------------------
 
@@ -59,8 +60,11 @@ sp.on('data', function(data) {
   var serialdata = data.split('~');
     var serialid = serialdata[0];
     var serialactive = serialdata[1];
-      io.sockets.emit('relayCallback', {id: serialid, active: serialactive});
+      io.sockets.emit('relayCallback', {id: serialid, active: serialactive, type: serial});
 });
+
+
+
 
 
 
@@ -90,24 +94,24 @@ sp.write("status\n", function(err, res) {
 // FIRST EMIT ACTUAL GPIO STATES TO CLIENT ON CONNECT
 
    if (relay1.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: 1, active: 1});
+                io.sockets.emit('relayCallback', {id: 1, active: 1, type: 'local'});
       } else if (relay1.digitalRead() == 0){
-                io.sockets.emit('relayCallback', {id: 1, active: 0});
+                io.sockets.emit('relayCallback', {id: 1, active: 0, type: 'local'});
             }
    if (relay2.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: 2, active: 1});
+                io.sockets.emit('relayCallback', {id: 2, active: 1, type: 'local'});
       } else if (relay2.digitalRead() == 0){
-                io.sockets.emit('relayCallback', {id: 2, active: 0});
+                io.sockets.emit('relayCallback', {id: 2, active: 0, type: 'local'});
             }
   if (relay3.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: 3, active: 1});
+                io.sockets.emit('relayCallback', {id: 3, active: 1, type: 'local'});
       } else if (relay2.digitalRead() == 0){
-                io.sockets.emit('relayCallback', {id: 3, active: 0});
+                io.sockets.emit('relayCallback', {id: 3, active: 0, type: 'local'});
             }
   if (relay4.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: 4, active: 1});
+                io.sockets.emit('relayCallback', {id: 4, active: 1, type: 'local'});
       } else if (relay2.digitalRead() == 0){
-                io.sockets.emit('relayCallback', {id: 4, active: 0});
+                io.sockets.emit('relayCallback', {id: 4, active: 0, type: 'local'});
             }
 
 
@@ -129,10 +133,10 @@ function pings(host, id) {
 // Only send relayCallback with active status if pingstatus has changed
 
         if ((isAlive == true) && (pingstatus['pingstatus' + id] == true)) {
-          io.sockets.emit('relayCallback', {id: id, active: 1});
+          io.sockets.emit('relayCallback', {id: id, active: 1, type: 'wol'});
           pingstatus['pingstatus' + id] = false;
         } else if ((isAlive == false) && (pingstatus['pingstatus' + id] == false)){
-          io.sockets.emit('relayCallback', {id: id, active: 0});
+          io.sockets.emit('relayCallback', {id: id, active: 0, type: 'wol'});
           pingstatus['pingstatus' + id] = true;
         }
     });
@@ -143,9 +147,10 @@ function pings(host, id) {
 // SET PING INTERVAL FOR ALL CLIENTS (ip, buttonID)
 
 function pingall(){
-  pings('10.0.0.30', '5');
-  pings('10.0.0.31', '6');
-  pings('10.0.0.11', '7');
+  pings('10.0.0.30', '1');
+  pings('10.0.0.31', '2');
+  pings('10.0.0.11', '3');
+  pings('10.0.0.1', '4');
 };  
 
 // INTERVAL PING
@@ -177,33 +182,54 @@ function pinghalt(time){
 // GPIO LOCAL RELAYS
 // -------------------------------------------------------------------------------
 
-        if (data.value == 1) {
+        if (data.value == 'local1') {
+
+              var node = data.value;
+              var node = node.replace('local', '');
+
             relay1.digitalWrite(relay1.digitalRead() ^ 1);
               if (relay1.digitalRead() == 1) {
-                  io.sockets.emit('relayCallback', {id: data.value, active: 1});
+                  io.sockets.emit('relayCallback', {id: node, active: 1, type: 'local'});
               } else {
-                  io.sockets.emit('relayCallback', {id: data.value, active: 0});
+                  io.sockets.emit('relayCallback', {id: node, active: 0, type: 'local'});
               }
-        } else if (data.value == 2) {
+
+
+        } else if (data.value == 'local2') {
+
+              var node = data.value;
+              var node = node.replace('local', '');
+
             relay2.digitalWrite(relay2.digitalRead() ^ 1);
               if (relay2.digitalRead() == 1) {
-                  io.sockets.emit('relayCallback', {id: data.value, active: 1});
+                  io.sockets.emit('relayCallback', {id: node, active: 1, type: 'local'});
               } else {
-                  io.sockets.emit('relayCallback', {id: data.value, active: 0});
+                  io.sockets.emit('relayCallback', {id: node, active: 0, type: 'local'});
               }
-        } else if (data.value == 3) {
+
+
+        } else if (data.value == 'local3') {
+
+              var node = data.value;
+              var node = node.replace('local', '');
+
             relay3.digitalWrite(relay3.digitalRead() ^ 1);
               if (relay3.digitalRead() == 1) {
-                  io.sockets.emit('relayCallback', {id: data.value, active: 1});
+                  io.sockets.emit('relayCallback', {id: node, active: 1, type: 'local'});
               } else {
-                  io.sockets.emit('relayCallback', {id: data.value, active: 0});
+                  io.sockets.emit('relayCallback', {id: node, active: 0, type: 'local'});
               }
-        } else if (data.value == 4) {
+
+        } else if (data.value == 'local4') {
+              
+              var node = data.value;
+              var node = node.replace('local', '');
+
             relay4.digitalWrite(relay4.digitalRead() ^ 1);
               if (relay4.digitalRead() == 1) {
-                  io.sockets.emit('relayCallback', {id: data.value, active: 1});
+                  io.sockets.emit('relayCallback', {id: node, active: 1, type: 'local'});
               } else {
-                  io.sockets.emit('relayCallback', {id: data.value, active: 0});
+                  io.sockets.emit('relayCallback', {id: node, active: 0, type: 'local'});
               }
 
 
@@ -212,26 +238,50 @@ function pinghalt(time){
 
 
 
-    // WORKSTATION 1
-        } else if (data.value == 5) {
+    // WORKSTATION 1 VIC
+        } else if (data.value == 'wol1') {
+
+            var node = data.value;
+            var node = node.replace('wol', '');
+
             console.log("Wake on Lan 6C:F0:49:E6:73:EB");
             wol.wake('6C:F0:49:E6:73:EB');
-            io.sockets.emit('relayCallback', {id: data.value, active: 3});
+            io.sockets.emit('relayCallback', {id: node, active: 3, type: 'wol'});
             pinghalt(5000);
 
 
-    // WORKSTATION 2
-        } else if (data.value == 6) {
-            console.log("Wake on Lan 6C:F0:49:E6:73:EB");
-            wol.wake('6C:F0:49:E6:73:EB');
-            io.sockets.emit('relayCallback', {id: data.value, active: 3});
+    // WORKSTATION 2 LIZ
+        } else if (data.value == 'wol2') {
+
+
+            var node = data.value;
+            var node = node.replace('wol', '');
+
+            console.log("Wake on Lan 60:E3:27:17:77:4E");
+            wol.wake('60:E3:27:17:77:4E');
+            io.sockets.emit('relayCallback', {id: node, active: 3, type: 'wol'});
             pinghalt(5000);
 
-    // MEDIA PI
-        } else if (data.value == 7) {
+    // MEDIA PI TORRENT
+        } else if (data.value == 'wol3') {
+
+
+            var node = data.value;
+            var node = node.replace('wol', '');
             console.log("Wake on Lan B8:27:EB:28:E2:2E");
             wol.wake('B8:27:EB:28:E2:2E');
-            io.sockets.emit('relayCallback', {id: data.value, active: 3});
+            io.sockets.emit('relayCallback', {id: node, active: 3, type: 'wol'});
+            pinghalt(5000);
+
+    // MAIN ROUTER
+        } else if (data.value == 'wol4') {
+
+
+            var node = data.value;
+            var node = node.replace('wol', '');
+            console.log("Wake on Lan E8:94:F6:68:4D:D6");
+            wol.wake('E8:94:F6:68:4D:D6');
+            io.sockets.emit('relayCallback', {id: node, active: 3, type: 'wol'});
             pinghalt(5000);
 
 
@@ -241,13 +291,17 @@ function pinghalt(time){
 // -------------------------------------------------------------------------------
 
 
-        } else if (data.value == 8) {
+        } else if (data.value == 'serial1') {
+            var node = data.value;
+            var node = node.replace('serial', '');
             write(data.value + "\n");
-            io.sockets.emit('relayCallback', {id: data.value, active: 4});
+            io.sockets.emit('relayCallback', {id: node, active: 4, type: 'serial'});
 
-        } else if (data.value == 9) {
+        } else if (data.value == 'serial2') {
+            var node = data.value;
+            var node = node.replace('serial', '');
             write(data.value + "\n");
-            io.sockets.emit('relayCallback', {id: data.value, active: 4});
+            io.sockets.emit('relayCallback', {id: node, active: 4, type: 'serial'});
         }
 
         

@@ -491,17 +491,19 @@ background: #222;
 
 	<div id="holder">
 
-		<div class="butt" id="relay5" onclick="relay(5);"> WORKSTATION 1</div> 
-		<div class="butt" id="relay6" onclick="relay(6);"> WORKSTATION 2 </div> 
-		<div class="butt" id="relay7" onclick="relay(7);"> MEDIA PI2 </div> 
+		<div class="butt" id="wol4" onclick="relay(this)"> MAIN ROUTER </div> 
+		<div class="butt" id="wol1" onclick="relay(this)">> WORKSTATION 1</div> 
+		<div class="butt" id="wol2" onclick="relay(this)"> WORKSTATION 2 </div> 
+		<div class="butt" id="wol3" onclick="relay(this)"> MEDIA PI2 </div>
 
-		<div class="butt" id="relay1" onclick="relay(1);"> NODE1 </div> 
-		<div class="butt" id="relay2" onclick="relay(2);"> NODE2 </div> 
-		<div class="butt" id="relay3" onclick="relay(3);"> NODE3 </div> 
-		<div class="butt" id="relay4" onclick="relay(4);"> NODE4 </div>
 
-		<div class="butt" id="relay8" onclick="relay(8);"> SERIAL1 </div>
-		<div class="butt" id="relay9" onclick="relay(9);"> SERIAL2 </div>
+		<div class="butt" id="local1" onclick="relay(this)"> NODE1 </div> 
+		<div class="butt" id="local2" onclick="relay(this)"> NODE2 </div> 
+		<div class="butt" id="local3" onclick="relay(this)"> NODE3 </div> 
+		<div class="butt" id="local4" onclick="relay(this)"> NODE4 </div>
+
+		<div class="butt" id="serial1" onclick="relay(this)"> SERIAL1 </div>
+		<div class="butt" id="serial2" onclick="relay(this)"> SERIAL2 </div>
 
 	</div>
 
@@ -509,12 +511,13 @@ background: #222;
 
 <script>
 
-	var socket = io.connect();
-	var Feedback = document.getElementById("feedback");
+var socket = io.connect();
+var Feedback = document.getElementById("feedback");
 
 // EMIT ID TO BACKEND
 
-	function relay(data){
+function relay(obj){
+		var data = obj.id;
 		socket.emit('relaycmd', { value: data });
 	}
 
@@ -525,47 +528,54 @@ background: #222;
 
 		var id = data.id
        	var active = data.active
+       	var type = data.type
 
     // ON
+
 	       	if (active == 1) {
-					if (id == 5 || id == 6 || id == 7) {
-						document.getElementById("relay" + id).style.backgroundColor = "#4e9c37";
-						Feedback.innerHTML = "<h1>WORKSTATION ONLINE</h1>";
-					} else if (id == 8 || id == 9) {
-						document.getElementById("relay" + id).style.backgroundColor = "#4056d1";
+					if (type == 'wol') {
+						document.getElementById("wol" + id).style.backgroundColor = "#0097b2";
+						Feedback.innerHTML = "<h1>MACHINE ONLINE</h1>";
+					} else if (type == 'serial') {
+						document.getElementById("serial" + id).style.backgroundColor = "#7c00b2";
 						Feedback.innerHTML = "<h1>REMOTE SERIAL "+id+" CALL ON</h1>";
-					} else {
-						document.getElementById("relay" + id).style.backgroundColor = "#10a620";
+					} else if (type == 'local') {
+						document.getElementById("local" + id).style.backgroundColor = "#00b235";
 						Feedback.innerHTML = "<h1>Node "+id+" ON</h1>";
+					} else {
+						Feedback.innerHTML = "<h1>Node "+id+" ERROR!</h1>";
 					}
-
 	// OFF
-			} else if (active == 0) {
-					document.getElementById("relay" + id).style.backgroundColor = "#bb1313";
 
+			} else if (active == 0) {
+					document.getElementById(type + id).style.backgroundColor = "#bb1313";
 				// WAKE ON LAN BUTTONS
-					if (id == 5 || id == 6 || id == 7) {
-						Feedback.innerHTML = "<h1>WORKSTATION OFFLINE</h1>";
+					if (type == 'wol') {
+						Feedback.innerHTML = "<h1>MACHINE OFFLINE</h1>";
 				// SERIAL BUTTONS
-					} else if (id == 8 || id == 9) {
+					} else if (type == 'serial') {
 						Feedback.innerHTML = "<h1>REMOTE SERIAL "+id+" CALL OFF</h1>";
 				// RELAY BUTTONS
-					} else {
+					} else if (type == 'local') {
 						Feedback.innerHTML = "<h1>NODE "+id+" OFF</h1>";
+					} else {
+						Feedback.innerHTML = "<h1>NODE "+id+" ERROR!</h1>";
 					}
 
 	// TEMP BOOTING WAKEONLAN/SERIAL STATUS 
+
 			} else if (active == 3) {			
-						Feedback.innerHTML = "<h1>COMPUTER BOOTING</h1>";
-						document.getElementById("relay" + id).style.backgroundColor = "#9b59a8";
+						Feedback.innerHTML = "<h1>MACHINE BOOTING</h1>";
+						document.getElementById(type + id).style.backgroundColor = "#e57e00";
 			} else if (active == 4) {			
 						Feedback.innerHTML = "<h1>SERIAL " + id + " </h1>";
-						document.getElementById("relay" + id).style.backgroundColor = "#9b59a8";
+						document.getElementById(type + id).style.backgroundColor = "#e57e00";
 			}
 	});
 
 
     
 
-</script></body>
+</script>
+</body>
 </html>
