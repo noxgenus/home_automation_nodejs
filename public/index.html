@@ -66,6 +66,7 @@ width:100%;
 height:auto;
 display:block;
 box-sizing: border-box;
+max-width:810px;
 }
 #topholder {
 width:100%;
@@ -191,7 +192,7 @@ text-align:center;
 user-select: none !important;
 }
 
-#feedbackholder {
+#feedbackholder, #feedbackholderR {
 display:block;
 width:100%;
 padding:10px;
@@ -305,11 +306,11 @@ text-align:center;
    margin:0px 0px 5px 0px; 
 }
 
-#feedbackholder {
+#feedbackholder, #feedbackholderR {
 display:block;
 width:100%;
 padding:10px;
-margin:0 5px 5px 0;
+margin:0 0px 5px 0;
 border:2px solid #4292f4;
 box-sizing: border-box;
 font-size: 2em;
@@ -457,7 +458,7 @@ user-select: none !important;
    margin:0px 0px 10px 0px; 
 }
 
-#feedbackholder {
+#feedbackholder, #feedbackholderR {
 display:block;
 width:100%;
 padding:10px;
@@ -474,6 +475,23 @@ background: #222;
 
 
 }
+
+#feedbackholder {
+display:block;
+width:75%;
+float: left;
+}
+#feedbackholderR {
+display:block;
+width:25%;
+float: right;
+border-left:none;
+text-align: center;
+}
+#feedbackholderR h1{
+color: #ff7200;
+}
+
 </style>
 
 <script src="socket.io/socket.io.js"></script>
@@ -485,25 +503,32 @@ background: #222;
 
 	<div id="topholder">
 
-		<div id="feedbackholder"><h1 class="prefix">Last status message: </h1><span id="feedback"><h1>No Connection with back-end</h1></span></div>
+		<div id="feedbackholder">
+			<h1 class="prefix">Last status message: </h1>
+			<span id="feedback"><h1>No Connection with back-end</h1></span>
+		</div>
+
+		<div id="feedbackholderR">
+			<span id="feedbackR"><h1>---</h1></span>
+		</div>
 
 	</div>
 
 	<div id="holder">
 
-		<div class="butt" id="wol4" onclick="relay(this)"> MAIN ROUTER </div> 
-		<div class="butt" id="wol1" onclick="relay(this)">> WORKSTATION 1</div> 
-		<div class="butt" id="wol2" onclick="relay(this)"> WORKSTATION 2 </div> 
-		<div class="butt" id="wol3" onclick="relay(this)"> MEDIA PI2 </div>
+		<div class="butt" id="wol4" btype="wol" wake="E8-94-F6-68-4D-D6" onclick="relay(this)"> MAIN ROUTER </div> 
+		<div class="butt" id="wol1" btype="wol" wake="6C-F0-49-E6-73-EB" onclick="relay(this)"> WORKSTATION 1</div> 
+		<div class="butt" id="wol2" btype="wol" wake="60-E3-27-17-77-4E" onclick="relay(this)"> WORKSTATION 2 </div> 
+		<div class="butt" id="wol3" btype="wol" wake="B8-27-EB-28-E2-2E" onclick="relay(this)"> MEDIA PI2 </div>
 
 
-		<div class="butt" id="local1" onclick="relay(this)"> NODE1 </div> 
-		<div class="butt" id="local2" onclick="relay(this)"> NODE2 </div> 
-		<div class="butt" id="local3" onclick="relay(this)"> NODE3 </div> 
-		<div class="butt" id="local4" onclick="relay(this)"> NODE4 </div>
+		<div class="butt" id="local1" btype="local" wake="" onclick="relay(this)"> NODE1 </div> 
+		<div class="butt" id="local2" btype="local" wake="" onclick="relay(this)"> NODE2 </div> 
+		<div class="butt" id="local3" btype="local" wake="" onclick="relay(this)"> NODE3 </div> 
+		<div class="butt" id="local4" btype="local" wake="" onclick="relay(this)"> NODE4 </div>
 
-		<div class="butt" id="serial1" onclick="relay(this)"> SERIAL1 </div>
-		<div class="butt" id="serial2" onclick="relay(this)"> SERIAL2 </div>
+		<div class="butt" id="serial1" btype="serial" wake="" onclick="relay(this)"> SERIAL1 </div>
+		<div class="butt" id="serial2" btype="serial" wake="" onclick="relay(this)"> SERIAL2 </div>
 
 	</div>
 
@@ -513,14 +538,35 @@ background: #222;
 
 var socket = io.connect();
 var Feedback = document.getElementById("feedback");
+var TempHumid = document.getElementById("feedbackR");
 
 // EMIT ID TO BACKEND
 
 function relay(obj){
-		var data = obj.id;
-		socket.emit('relaycmd', { value: data });
+		var buttonid = obj.id;
+		var buttontype = obj.getAttribute("btype");
+		var buttonwake = obj.getAttribute("wake");
+		socket.emit('relaycmd', {id: buttonid, type: buttontype, wake: buttonwake});
 	}
 
+
+// SENSORS
+
+	socket.on('sensorCallback', function (data) {
+
+       	var type = data.type
+       	var temp = data.temp
+       	var humid = data.humid
+
+		// TEMP/HUMID SENSOR
+
+		if(typeof temp !== "undefined") {
+			TempHumid.innerHTML = "<h1>" + temp + "°C / " + humid + "%</h1>";
+		} else {
+			TempHumid.innerHTML = "<h1>---</h1>";
+		}
+
+	});
 
 // BUTTON ON/OFF STATUSSES
 
@@ -530,17 +576,18 @@ function relay(obj){
        	var active = data.active
        	var type = data.type
 
+
     // ON
 
 	       	if (active == 1) {
 					if (type == 'wol') {
-						document.getElementById("wol" + id).style.backgroundColor = "#0097b2";
+						document.getElementById(type + id).style.backgroundColor = "#0097b2";
 						Feedback.innerHTML = "<h1>MACHINE ONLINE</h1>";
 					} else if (type == 'serial') {
-						document.getElementById("serial" + id).style.backgroundColor = "#7c00b2";
+						document.getElementById(type + id).style.backgroundColor = "#7c00b2";
 						Feedback.innerHTML = "<h1>REMOTE SERIAL "+id+" CALL ON</h1>";
 					} else if (type == 'local') {
-						document.getElementById("local" + id).style.backgroundColor = "#00b235";
+						document.getElementById(type + id).style.backgroundColor = "#00b235";
 						Feedback.innerHTML = "<h1>Node "+id+" ON</h1>";
 					} else {
 						Feedback.innerHTML = "<h1>Node "+id+" ERROR!</h1>";

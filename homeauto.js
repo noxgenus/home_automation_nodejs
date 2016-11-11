@@ -60,11 +60,28 @@ sp.on('data', function(data) {
   var serialdata = data.split('~');
     var serialid = serialdata[0];
     var serialactive = serialdata[1];
-      io.sockets.emit('relayCallback', {id: serialid, active: serialactive, type: serial});
+      io.sockets.emit('relayCallback', {id: serialid, active: serialactive, type: 'serial'});
 });
 
 
+// TEMP/HUMID SENSOR DHT22
+var sensor = require('node-dht-sensor');
 
+      function gettemp(){
+            sensor.read(22, 4, function(err, temperature, humidity) {
+              if (!err) {
+               console.log('temp: ' + temperature.toFixed(1) + '°C, ' +
+                         'humidity: ' + humidity.toFixed(1) + '%'
+                );
+                io.sockets.emit('sensorCallback', {temp: temperature.toFixed(1), humid: humidity.toFixed(1), type: 'temp'});
+              } else {
+                io.sockets.emit('sensorCallback', {temp: 'undefined', humid: 'undefined', type: 'temp'});
+
+              }
+          }); 
+        };
+
+      var temperatureinterval = setInterval(gettemp, 10000);
 
 
 
@@ -74,11 +91,6 @@ sp.on('data', function(data) {
 
 io.sockets.on('connection', function (socket) {
 
-// STATUS PING WORKSTATIONS
-
-pingall();
-
-
 // STATUS CALL FROM SERIAL TRANSPONDERS
 
 sp.write("status\n", function(err, res) {
@@ -87,32 +99,6 @@ sp.write("status\n", function(err, res) {
     }
 });
 
-
-// LOCAL GPIO RELAYS
-// -------------------------------------------------------------------------------
-
-// FIRST EMIT ACTUAL GPIO STATES TO CLIENT ON CONNECT
-
-   if (relay1.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: 1, active: 1, type: 'local'});
-      } else if (relay1.digitalRead() == 0){
-                io.sockets.emit('relayCallback', {id: 1, active: 0, type: 'local'});
-            }
-   if (relay2.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: 2, active: 1, type: 'local'});
-      } else if (relay2.digitalRead() == 0){
-                io.sockets.emit('relayCallback', {id: 2, active: 0, type: 'local'});
-            }
-  if (relay3.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: 3, active: 1, type: 'local'});
-      } else if (relay2.digitalRead() == 0){
-                io.sockets.emit('relayCallback', {id: 3, active: 0, type: 'local'});
-            }
-  if (relay4.digitalRead() == 1) {
-                io.sockets.emit('relayCallback', {id: 4, active: 1, type: 'local'});
-      } else if (relay2.digitalRead() == 0){
-                io.sockets.emit('relayCallback', {id: 4, active: 0, type: 'local'});
-            }
 
 
 // PING WORKSTATION/HOSTS FUNCTIONS
@@ -168,8 +154,36 @@ function pinghalt(time){
 }
 
 
+// LOCAL GPIO RELAYS
+// -------------------------------------------------------------------------------
+
+// FIRST EMIT ACTUAL GPIO STATES TO CLIENT ON CONNECT
+
+   if (relay1.digitalRead() == 1) {
+                io.sockets.emit('relayCallback', {id: 1, active: 1, type: 'local'});
+      } else if (relay1.digitalRead() == 0){
+                io.sockets.emit('relayCallback', {id: 1, active: 0, type: 'local'});
+            }
+   if (relay2.digitalRead() == 1) {
+                io.sockets.emit('relayCallback', {id: 2, active: 1, type: 'local'});
+      } else if (relay2.digitalRead() == 0){
+                io.sockets.emit('relayCallback', {id: 2, active: 0, type: 'local'});
+            }
+  if (relay3.digitalRead() == 1) {
+                io.sockets.emit('relayCallback', {id: 3, active: 1, type: 'local'});
+      } else if (relay2.digitalRead() == 0){
+                io.sockets.emit('relayCallback', {id: 3, active: 0, type: 'local'});
+            }
+  if (relay4.digitalRead() == 1) {
+                io.sockets.emit('relayCallback', {id: 4, active: 1, type: 'local'});
+      } else if (relay2.digitalRead() == 0){
+                io.sockets.emit('relayCallback', {id: 4, active: 0, type: 'local'});
+            }
 
 
+// STATUS PING WORKSTATIONS
+
+pingall();
 
 // ON CLIENT BUTTON PRESS RECEIVING SOCKET
 // -------------------------------------------------------------------------------
@@ -177,133 +191,79 @@ function pinghalt(time){
 
   socket.on('relaycmd', function (data) { 
 
-    console.log('Relay:' + data.value);
+      var id = data.id;
+      var id = id.replace(/wol|local|serial/g, '');
+      var type = data.type;
+      var wake = data.wake;
+      var wake = wake.replace(/-/g, '\:');
+
+      console.log('Relay:' + type + id);
+
 
 // GPIO LOCAL RELAYS
 // -------------------------------------------------------------------------------
 
-        if (data.value == 'local1') {
+    if (type == 'local') {
 
-              var node = data.value;
-              var node = node.replace('local', '');
 
+        if (id == '1') {
             relay1.digitalWrite(relay1.digitalRead() ^ 1);
               if (relay1.digitalRead() == 1) {
-                  io.sockets.emit('relayCallback', {id: node, active: 1, type: 'local'});
+                  io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
               } else {
-                  io.sockets.emit('relayCallback', {id: node, active: 0, type: 'local'});
+                  io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
               }
 
 
-        } else if (data.value == 'local2') {
-
-              var node = data.value;
-              var node = node.replace('local', '');
-
+        } else if (id == '2') {
             relay2.digitalWrite(relay2.digitalRead() ^ 1);
               if (relay2.digitalRead() == 1) {
-                  io.sockets.emit('relayCallback', {id: node, active: 1, type: 'local'});
+                  io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
               } else {
-                  io.sockets.emit('relayCallback', {id: node, active: 0, type: 'local'});
+                  io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
               }
 
 
-        } else if (data.value == 'local3') {
-
-              var node = data.value;
-              var node = node.replace('local', '');
-
-            relay3.digitalWrite(relay3.digitalRead() ^ 1);
+        } else if (id == '3') {
+              relay3.digitalWrite(relay3.digitalRead() ^ 1);
               if (relay3.digitalRead() == 1) {
-                  io.sockets.emit('relayCallback', {id: node, active: 1, type: 'local'});
+                  io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
               } else {
-                  io.sockets.emit('relayCallback', {id: node, active: 0, type: 'local'});
+                  io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
               }
 
-        } else if (data.value == 'local4') {
-              
-              var node = data.value;
-              var node = node.replace('local', '');
-
-            relay4.digitalWrite(relay4.digitalRead() ^ 1);
+        } else if (id == '4') {
+              relay4.digitalWrite(relay4.digitalRead() ^ 1);
               if (relay4.digitalRead() == 1) {
-                  io.sockets.emit('relayCallback', {id: node, active: 1, type: 'local'});
+                  io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
               } else {
-                  io.sockets.emit('relayCallback', {id: node, active: 0, type: 'local'});
+                  io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
               }
+        }
+
 
 
 // WAKE ON LAN
 // -------------------------------------------------------------------------------
 
 
+    } else if (type == 'wol') {
 
-    // WORKSTATION 1 VIC
-        } else if (data.value == 'wol1') {
-
-            var node = data.value;
-            var node = node.replace('wol', '');
-
-            console.log("Wake on Lan 6C:F0:49:E6:73:EB");
-            wol.wake('6C:F0:49:E6:73:EB');
-            io.sockets.emit('relayCallback', {id: node, active: 3, type: 'wol'});
+            console.log(wake);
+            wol.wake(wake);
+            io.sockets.emit('relayCallback', {id: id, active: 3, type: type});
             pinghalt(5000);
-
-
-    // WORKSTATION 2 LIZ
-        } else if (data.value == 'wol2') {
-
-
-            var node = data.value;
-            var node = node.replace('wol', '');
-
-            console.log("Wake on Lan 60:E3:27:17:77:4E");
-            wol.wake('60:E3:27:17:77:4E');
-            io.sockets.emit('relayCallback', {id: node, active: 3, type: 'wol'});
-            pinghalt(5000);
-
-    // MEDIA PI TORRENT
-        } else if (data.value == 'wol3') {
-
-
-            var node = data.value;
-            var node = node.replace('wol', '');
-            console.log("Wake on Lan B8:27:EB:28:E2:2E");
-            wol.wake('B8:27:EB:28:E2:2E');
-            io.sockets.emit('relayCallback', {id: node, active: 3, type: 'wol'});
-            pinghalt(5000);
-
-    // MAIN ROUTER
-        } else if (data.value == 'wol4') {
-
-
-            var node = data.value;
-            var node = node.replace('wol', '');
-            console.log("Wake on Lan E8:94:F6:68:4D:D6");
-            wol.wake('E8:94:F6:68:4D:D6');
-            io.sockets.emit('relayCallback', {id: node, active: 3, type: 'wol'});
-            pinghalt(5000);
-
-
 
 
 // SERIAL REMOTE HC12 TRANSPONDERS (NOT FINISHED)
 // -------------------------------------------------------------------------------
 
+    } else if (type == 'serial') {
 
-        } else if (data.value == 'serial1') {
-            var node = data.value;
-            var node = node.replace('serial', '');
-            write(data.value + "\n");
-            io.sockets.emit('relayCallback', {id: node, active: 4, type: 'serial'});
+            write(id + "\n");
+            io.sockets.emit('relayCallback', {id: id, active: 4, type: type});
 
-        } else if (data.value == 'serial2') {
-            var node = data.value;
-            var node = node.replace('serial', '');
-            write(data.value + "\n");
-            io.sockets.emit('relayCallback', {id: node, active: 4, type: 'serial'});
-        }
-
+    }
         
         function write(message) {
             console.log("Sending Serial Data: " + message);
