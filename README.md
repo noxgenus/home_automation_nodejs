@@ -36,6 +36,20 @@ npm install serialport --build-from-source<br>
 #PigPio:
 npm install pigpio
 
+#DHT22 Temperature/Humidity Sensor
+
+First download and install BCM2835 driver<br>
+wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.44.tar.gz<br>
+tar zxvf bcm2835-1.44.tar.gz<br>
+cd bcm2835-1.44<br>
+./configure<br>
+make<br>
+sudo make check<br>
+sudo make install<br><br>
+
+Then install npm package:<br>
+npm install node-dht-sensor<br><br>
+
 #Folder structure:
 homeauto.js index.html
 
