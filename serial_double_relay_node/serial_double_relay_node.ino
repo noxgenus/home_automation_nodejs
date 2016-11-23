@@ -43,37 +43,37 @@ void loop() {
    
       
 
-         if (str == "8") {
+         if (str == "1") {
                     if (digitalRead(relay1) == HIGH){
                         digitalWrite(relay1, LOW);
-                        Serial.println("8~0");
+                        Serial.println("1~0");
                         
                     } else if (digitalRead(relay1) == LOW) {
                         digitalWrite(relay1, HIGH);
-                        Serial.println("8~1");
+                        Serial.println("1~1");
                         
                     }    
-         } else if (str == "9") {
+         } else if (str == "2") {
                     if (digitalRead(relay2) == HIGH){
                         digitalWrite(relay2, LOW);
-                        Serial.println("9~0");
+                        Serial.println("2~0");
                         
                     } else if (digitalRead(relay2) == LOW) {
                         digitalWrite(relay2, HIGH);
-                        Serial.println("9~1");
+                        Serial.println("2~1");
                     }
 
         } else if (str == "status") {
                     if (digitalRead(relay1) == HIGH){
-                        Serial.println("8~1");
+                        Serial.println("1~1");
                     } else if (digitalRead(relay1) == LOW) {
-                        Serial.println("8~0");    
+                        Serial.println("1~0");    
                     }
                      
                     if (digitalRead(relay2) == HIGH) {
-                        Serial.println("9~1");
+                        Serial.println("2~1");
                     } else if (digitalRead(relay2) == LOW) {
-                        Serial.println("9~0");
+                        Serial.println("2~0");
                     } 
                   
          } else {
