@@ -1,0 +1,66 @@
+{
+  "name": "VW Home Automation",
+  "short_name": "Home Automation",
+  "theme_color": "#111",
+  "icons": [
+    {
+      "src": "data/img/homescreen/36.png",
+      "sizes": "36x36",
+      "type": "image/png",
+      "density": 0.75
+    },
+    {
+      "src": "data/img/homescreen/48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "density": 1.0
+    },
+    {
+      "src": "data/img/homescreen/72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "density": 1.5
+    },
+    {
+      "src": "data/img/homescreen/96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "density": 2.0
+    },
+    {
+      "src": "data/img/homescreen/144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "density": 3.0
+    },
+    {
+      "src": "data/img/homescreen/192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "density": 4.0
+    }
+  ],
+  "splash_screens": [
+    {
+      "src": "data/img/splash/splash_427x240.jpg",
+      "sizes": "427x240",
+      "type": "image/jpg",
+      "density": 0.75
+    },
+    {
+      "src": "data/img/splash/splash_1333x750.jpg",
+      "sizes": "1333x750",
+      "type": "image/jpg",
+      "density": 1.5
+    },
+    {
+      "src": "data/img/splash/splash_1920x1080.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpg",
+      "density": 3.0
+    }
+  ],
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "landscape"
+}
