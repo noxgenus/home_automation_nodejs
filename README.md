@@ -95,25 +95,25 @@ nano boothomeauto<br>
 
 Paste this:<br><br>
 
-```javascript
-#!/bin/sh<br>
-#/etc/init.d/boothomeauto<br>
-export PATH=$PATH:/home/pi/node<br>
-export NODE_PATH=$NODE_PATH:/home/pi/node/node_modules<br>
+```
+#!/bin/sh
+#/etc/init.d/boothomeauto
+export PATH=$PATH:/home/pi/node
+export NODE_PATH=$NODE_PATH:/home/pi/node/node_modules
 
-case "$1" in<br>
-start)<br>
-exec forever --sourceDir=/home/pi/node -p /home/pi/node homeauto.js  #scriptarguments<br>
-;;<br>
-stop)<br>
-exec forever stop --sourceDir=/home/pi/node homeauto.js<br>
-;;<br>
-*)<br>
-echo "Usage: /etc/init.d/boothomeauto {start|stop}"<br>
-exit 1<br>
-;;<br>
-esac<br>
-exit 0<br><br>
+case "$1" in
+start)
+exec forever --sourceDir=/home/pi/node -p /home/pi/node homeauto.js  #scriptarguments
+;;
+stop)
+exec forever stop --sourceDir=/home/pi/node homeauto.js
+;;
+*)
+echo "Usage: /etc/init.d/boothomeauto {start|stop}"
+exit 1
+;;
+esac
+exit 0
 ```
 
 chmod 755 /etc/init.d/boothomeauto<br><br>
