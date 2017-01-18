@@ -88,3 +88,43 @@ in the SeatDefaults section it gives the command for starting the X server which
 
 xserver-command=X -s 0 -dpms<br><br>
 
+#Auto boot NodeJS app on startup
+
+cd /etc/init.d<br>
+nano boothomeauto<br>
+
+Paste this:<br><br>
+
+#!/bin/sh<br>
+#/etc/init.d/boothomeauto<br>
+export PATH=$PATH:/home/pi/node<br>
+export NODE_PATH=$NODE_PATH:/home/pi/node/node_modules<br>
+
+case "$1" in<br>
+start)<br>
+exec forever --sourceDir=/home/pi/node -p /home/pi/node homeauto.js  #scriptarguments<br>
+;;<br>
+stop)<br>
+exec forever stop --sourceDir=/home/pi/node homeauto.js<br>
+;;<br>
+*)<br>
+echo "Usage: /etc/init.d/boothomeauto {start|stop}"<br>
+exit 1<br>
+;;<br>
+esac<br>
+exit 0<br><br>
+
+chmod 755 /etc/init.d/boothomeauto<br><br>
+
+Test it:<br>
+
+sh /etc/init.d/boothomeauto start<br><br>
+
+Make it bootable:<br>
+
+update-rc.d boothomeauto defaults<br><br>
+
+To remove it from boot:<br>
+
+update-rc.d -f boothomeauto remove<br><br>
+
