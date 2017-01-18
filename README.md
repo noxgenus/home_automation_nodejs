@@ -95,7 +95,7 @@ nano boothomeauto<br>
 
 Paste this:<br><br>
 
-<code>
+```javascript
 #!/bin/sh<br>
 #/etc/init.d/boothomeauto<br>
 export PATH=$PATH:/home/pi/node<br>
@@ -114,7 +114,7 @@ exit 1<br>
 ;;<br>
 esac<br>
 exit 0<br><br>
-</code>
+```
 
 chmod 755 /etc/init.d/boothomeauto<br><br>
 
