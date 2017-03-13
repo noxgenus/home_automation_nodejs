@@ -73,7 +73,7 @@ width:100%;
 height:auto;
 display:block;
 box-sizing: border-box;
-max-width:810px;
+/*max-width:810px;*/
 }
 #topholder {
 width:100%;
@@ -199,7 +199,7 @@ text-align:center;
 user-select: none !important;
 }
 
-#feedbackholder, #feedbackholderR {
+#feedbackholder, #feedbackholderR, #feedbackholderM {
 display:block;
 width:100%;
 padding:10px;
@@ -213,6 +213,12 @@ text-transform:uppercase;
 color: #c5c5c5;
 background: #222;
 }
+#gasalarm {
+display:block;
+width:100%;
+height:30px;
+}
+
 
 
 
@@ -240,7 +246,7 @@ margin:0;
 padding: 5px 4px 0 4px;
 border:0;
 outline:0;
-width:100%;
+width:800px;
 height:auto;
 display:block;
 cursor: none !important;
@@ -313,7 +319,7 @@ text-align:center;
    margin:0px 0px 5px 0px; 
 }
 
-#feedbackholder, #feedbackholderR {
+#feedbackholder, #feedbackholderR, #feedbackholderM {
 display:block;
 width:100%;
 padding:10px;
@@ -321,11 +327,21 @@ margin:0 0px 5px 0;
 border:2px solid #4292f4;
 box-sizing: border-box;
 font-size: 2em;
-line-height: 1.0em;
+line-height: 1.2em;
 font-weight: normal;
 text-transform:uppercase;
 color: #c5c5c5;
 background: #222;
+
+}
+#gasalarm {
+display:block;
+width:100%;
+height:50px;
+}
+
+#feedbackholderM{
+	padding:0;
 }
 
 }
@@ -443,16 +459,16 @@ user-select: none !important;
 .butt { 
 margin: 0px;
 width:100%;
-height: 100px;
+height: 70px;
 font-size: 3em;
-line-height: 100px;
+line-height: 70px;
 padding:0;
 border:0;
 cursor: none !important;
-margin:0 0 10px 0;
+margin:0 0 5px 0;
 display:block;
 outline:0;
-background:#bb1313 url('../data/img/corner.png') no-repeat top right;
+background:#bb1313 url('../data/img/cornermob.png') no-repeat top right;
 text-align:center;
 -webkit-touch-callout: none !important;
 -webkit-user-select: none !important;
@@ -462,31 +478,50 @@ text-align:center;
 user-select: none !important;
 }
 .butt:nth-child(4n+4) {
-   margin:0px 0px 10px 0px; 
+   margin:0px 0px 5px 0px; 
 }
 
-#feedbackholder, #feedbackholderR {
+#feedbackholder, #feedbackholderR, #feedbackholderM {
 display:block;
 width:100%;
-padding:10px;
-margin:0 0 10px 0;
+padding:5px;
+margin:0 0 5px 0;
 border:2px solid #4292f4;
 box-sizing: border-box;
-font-size: 2em;
+font-size: 1.3em;
 line-height: 1.0em;
 font-weight: normal;
 text-transform:uppercase;
 color: #c5c5c5;
 background: #222;
+height: 52px;
+}
+#feedbackholderR{
+	font-size: 1.2em;
+}
+#feedbackholderM{
+	padding:0;
 }
 
+#gasalarm {
+display:block;
+width:100%;
+height:48px;
+}
 
 }
 
 #feedbackholder {
 display:block;
-width:75%;
+width:65%;
 float: left;
+}
+#feedbackholderM {
+display:block;
+width:10%;
+float: right;
+border-left:none;
+text-align: center;
 }
 #feedbackholderR {
 display:block;
@@ -498,6 +533,7 @@ text-align: center;
 #feedbackholderR h1{
 color: #ff7200;
 }
+
 
 </style>
 
@@ -511,8 +547,12 @@ color: #ff7200;
 	<div id="topholder">
 
 		<div id="feedbackholder">
-			<h1 class="prefix">Last status message: </h1>
+			<h1 class="prefix">Last status: </h1>
 			<span id="feedback"><h1>No Connection with back-end</h1></span>
+		</div>
+
+		<div id="feedbackholderM">
+			<span id="gasalarm"></span>
 		</div>
 
 		<div id="feedbackholderR">
@@ -525,7 +565,7 @@ color: #ff7200;
 
 		<div class="butt" id="wol4" btype="wol" wake="E8-94-F6-68-4D-D6" onclick="relay(this)"> MAIN ROUTER </div> 
 		<div class="butt" id="wol1" btype="wol" wake="6C-F0-49-E6-73-EB" onclick="relay(this)"> WORKSTATION 1</div> 
-		<div class="butt" id="wol2" btype="wol" wake="60-E3-27-17-77-4E" onclick="relay(this)"> WORKSTATION 2 </div> 
+		<div class="butt" id="wol2" btype="wol" wake="C0-3F-D5-6B-31-F4" onclick="relay(this)"> WORKSTATION 2 </div> 
 		<div class="butt" id="wol3" btype="wol" wake="B8-27-EB-28-E2-2E" onclick="relay(this)"> MEDIA PI2 </div>
 
 
@@ -567,11 +607,9 @@ function relay(obj){
 
 		// TEMP/HUMID SENSOR
 
-		if(typeof temp !== "undefined") {
-			TempHumid.innerHTML = "<h1>" + temp + "°C / " + humid + "%</h1>";
-		} else {
-			TempHumid.innerHTML = "<h1>---</h1>";
-		}
+		
+		TempHumid.innerHTML = "<h1>" + temp + "°C / " + humid + "%</h1>";
+
 
 	});
 
@@ -596,22 +634,30 @@ function relay(obj){
 					} else if (type == 'local') {
 						document.getElementById(type + id).style.backgroundColor = "#00b235";
 						Feedback.innerHTML = "<h1>Node "+id+" ON</h1>";
+					} else if (type == 'gas') {
+						document.getElementById('gasalarm').style.backgroundColor = "#bb1313";
+						Feedback.innerHTML = "<h1>Gas Detected!</h1>";
 					} else {
 						Feedback.innerHTML = "<h1>Node "+id+" ERROR!</h1>";
 					}
 	// OFF
 
 			} else if (active == 0) {
-					document.getElementById(type + id).style.backgroundColor = "#bb1313";
+					
 				// WAKE ON LAN BUTTONS
 					if (type == 'wol') {
 						Feedback.innerHTML = "<h1>MACHINE OFFLINE</h1>";
+						document.getElementById(type + id).style.backgroundColor = "#bb1313";
 				// SERIAL BUTTONS
 					} else if (type == 'serial') {
 						Feedback.innerHTML = "<h1>REMOTE SERIAL "+id+" CALL OFF</h1>";
+						document.getElementById(type + id).style.backgroundColor = "#bb1313";
 				// RELAY BUTTONS
 					} else if (type == 'local') {
 						Feedback.innerHTML = "<h1>NODE "+id+" OFF</h1>";
+						document.getElementById(type + id).style.backgroundColor = "#bb1313";
+					} else if (type == 'gas') {
+						document.getElementById('gasalarm').style.backgroundColor = "#00b235";
 					} else {
 						Feedback.innerHTML = "<h1>NODE "+id+" ERROR!</h1>";
 					}

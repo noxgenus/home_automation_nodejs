@@ -4,7 +4,13 @@ server = require('http').createServer(app);
 io = require('socket.io').listen(server);
 
 server.listen(8080);
-app.use(express.static('public'));      
+app.use(express.static('public'));     
+
+// AUDIO 
+// -------------------------------------------------------------------------------
+
+var Sound = require('aplay');
+
 
 // PIGPIO SET GPIO PINS AND OUTPUT MODE
 // -------------------------------------------------------------------------------
@@ -57,10 +63,26 @@ sp.on('open', function() {
 // ON INCOMING DATA
 sp.on('data', function(data) {
   console.log("Receiving Serial Data: " + data);
-  var serialdata = data.split('~');
+    var serialdata = data.split('~');
     var serialid = serialdata[0];
     var serialactive = serialdata[1];
-      io.sockets.emit('relayCallback', {id: serialid, active: serialactive, type: 'serial'});
+
+
+// MQ9 GAS SENSOR
+   if (serialid == 'gas'){
+        io.sockets.emit('relayCallback', {id: serialid, active: serialactive, type: 'gas'});
+            if (serialactive == 1){
+              //GAS DETECTED!!
+              new Sound().play('/home/pi/node/public/audio/224.wav');
+              }
+    } else {
+        io.sockets.emit('relayCallback', {id: serialid, active: serialactive, type: 'serial'});
+            if (serialactive == 1){
+              new Sound().play('/home/pi/node/public/audio/219.wav');
+              } else {
+              new Sound().play('/home/pi/node/public/audio/225.wav');
+              }
+      }
 });
 
 
@@ -75,7 +97,7 @@ var sensor = require('node-dht-sensor');
                 );
                 io.sockets.emit('sensorCallback', {temp: temperature.toFixed(1), humid: humidity.toFixed(1), type: 'temp'});
               } else {
-                io.sockets.emit('sensorCallback', {temp: 'undefined', humid: 'undefined', type: 'temp'});
+                io.sockets.emit('sensorCallback', {temp: '--', humid: '--', type: 'temp'});
 
               }
           }); 
@@ -120,9 +142,11 @@ function pings(host, id) {
 
         if ((isAlive == true) && (pingstatus['pingstatus' + id] == true)) {
           io.sockets.emit('relayCallback', {id: id, active: 1, type: 'wol'});
+          new Sound().play('/home/pi/node/public/audio/203.wav');
           pingstatus['pingstatus' + id] = false;
         } else if ((isAlive == false) && (pingstatus['pingstatus' + id] == false)){
           io.sockets.emit('relayCallback', {id: id, active: 0, type: 'wol'});
+          new Sound().play('/home/pi/node/public/audio/204.wav');
           pingstatus['pingstatus' + id] = true;
         }
     });
@@ -192,7 +216,7 @@ pingall();
   socket.on('relaycmd', function (data) { 
 
       var id = data.id;
-      var id = id.replace(/wol|local|serial/g, '');
+      var id = id.replace(/wol|local|gas|serial/g, '');
       var type = data.type;
       var wake = data.wake;
       var wake = wake.replace(/-/g, '\:');
@@ -205,13 +229,14 @@ pingall();
 
     if (type == 'local') {
 
-
         if (id == '1') {
             relay1.digitalWrite(relay1.digitalRead() ^ 1);
               if (relay1.digitalRead() == 1) {
                   io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
+                  new Sound().play('/home/pi/node/public/audio/218.wav');
               } else {
                   io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
+                  new Sound().play('/home/pi/node/public/audio/217.wav');
               }
 
 
@@ -219,8 +244,10 @@ pingall();
             relay2.digitalWrite(relay2.digitalRead() ^ 1);
               if (relay2.digitalRead() == 1) {
                   io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
+                  new Sound().play('/home/pi/node/public/audio/218.wav');
               } else {
                   io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
+                  new Sound().play('/home/pi/node/public/audio/217.wav');
               }
 
 
@@ -228,16 +255,20 @@ pingall();
               relay3.digitalWrite(relay3.digitalRead() ^ 1);
               if (relay3.digitalRead() == 1) {
                   io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
+                  new Sound().play('/home/pi/node/public/audio/218.wav');
               } else {
                   io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
+                  new Sound().play('/home/pi/node/public/audio/217.wav');
               }
 
         } else if (id == '4') {
               relay4.digitalWrite(relay4.digitalRead() ^ 1);
               if (relay4.digitalRead() == 1) {
                   io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
+                  new Sound().play('/home/pi/node/public/audio/218.wav');
               } else {
                   io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
+                  new Sound().play('/home/pi/node/public/audio/217.wav');
               }
         }
 
@@ -248,20 +279,20 @@ pingall();
 
 
     } else if (type == 'wol') {
-
             console.log(wake);
             wol.wake(wake);
             io.sockets.emit('relayCallback', {id: id, active: 3, type: type});
             pinghalt(5000);
+            new Sound().play('/home/pi/node/public/audio/215.wav');
 
 
 // SERIAL REMOTE HC12 TRANSPONDERS (NOT FINISHED)
 // -------------------------------------------------------------------------------
 
     } else if (type == 'serial') {
-
             write(id + "\n");
             io.sockets.emit('relayCallback', {id: id, active: 4, type: type});
+           new Sound().play('/home/pi/node/public/audio/202.wav');
 
     }
         
@@ -291,6 +322,9 @@ pingall();
 
 console.log("running");
 
+new Sound().play('/home/pi/node/public/audio/071.wav');
+ 
+
 
 // NODE EXIT HANDLER
 // -------------------------------------------------------------------------------
@@ -302,6 +336,8 @@ function exitHandler(options, err) {
     if (options.cleanup) console.log('clean');
     if (err) console.log(err.stack);
     if (options.exit) process.exit();
+
+    new Sound().play('/home/pi/node/public/audio/224.wav');
 }
 
 //do something when app is closing
