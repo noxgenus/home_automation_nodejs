@@ -88,6 +88,14 @@ in the SeatDefaults section it gives the command for starting the X server which
 
 xserver-command=X -s 0 -dpms<br><br>
 
+-OR-
+
+Edit the file /etc/kbd/config Change these lines:<br>
+BLANK_TIME=0<br>
+BLANK_DPMS=off<br>
+POWERDOWN_TIME=0<br>
+<br><br>
+
 #Auto boot NodeJS app on startup
 
 cd /etc/init.d<br>
