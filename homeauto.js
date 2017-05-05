@@ -158,13 +158,13 @@ function pings(host, id) {
 // Only send relayCallback with active status if pingstatus has changed
 
         if ((isAlive == true) && (pingstatus['pingstatus' + id] == true)) {
-          io.sockets.emit('relayCallback', {id: id, active: 1, type: 'wol'});
-          new Sound().play('/home/pi/node/public/audio/203.wav');
-          pingstatus['pingstatus' + id] = false;
+            io.sockets.emit('relayCallback', {id: id, active: 1, type: 'wol'});
+            new Sound().play('/home/pi/node/public/audio/203.wav');
+            pingstatus['pingstatus' + id] = false;
         } else if ((isAlive == false) && (pingstatus['pingstatus' + id] == false)){
-          io.sockets.emit('relayCallback', {id: id, active: 0, type: 'wol'});
-          new Sound().play('/home/pi/node/public/audio/204.wav');
-          pingstatus['pingstatus' + id] = true;
+            io.sockets.emit('relayCallback', {id: id, active: 0, type: 'wol'});
+            new Sound().play('/home/pi/node/public/audio/204.wav');
+            pingstatus['pingstatus' + id] = true;
         }
     });
 

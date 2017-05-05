@@ -563,7 +563,7 @@ color: #ff7200;
 }
 
 #motionOpen {
-background-color: #ccc;
+background-color: #00b235;
 }
 .motion {
 	background-color: #888;
@@ -622,10 +622,6 @@ background-color: #ccc;
 
 		<div class="butt motion" id="motion1" > Motion Room 1 </div>
 		<div class="butt motion" id="motion2" > Motion Room 2 </div>
-
-		<div class="butt motion"> TEST </div>
-		<div class="butt motion"> TEST </div>
-		<div class="butt motion"> TEST </div>
 
 	</div>
 
@@ -702,7 +698,8 @@ function relay(obj){
 						Feedback.innerHTML = "<h1>Gas Detected!</h1>";
 				// MOTION SENSORS
 					} else if (type == 'motion') {
-						//document.getElementById(type + id).style.backgroundColor = "#ffffff";
+						document.getElementById(type + id).style.backgroundColor = "#bb1313";
+						document.getElementById('motionOpen').style.backgroundColor = "#bb1313";
 						Feedback.innerHTML = "<h1>Motion Detected!</h1>";
 					} else {
 				// ELSE ERROR
@@ -729,7 +726,8 @@ function relay(obj){
 						document.getElementById('gasalarm').style.backgroundColor = "#00b235";
 				// MOTION SENSORS
 					} else if (type == 'motion') {
-						//document.getElementById(type + id).style.backgroundColor = "#999999";
+						document.getElementById(type + id).style.backgroundColor = "#00b235";
+						document.getElementById('motionOpen').style.backgroundColor = "#00b235";
 				// ELSE ERROR
 					} else {
 						Feedback.innerHTML = "<h1>NODE "+id+" ERROR!</h1>";
