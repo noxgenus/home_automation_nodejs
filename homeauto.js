@@ -64,23 +64,40 @@ sp.on('open', function() {
 sp.on('data', function(data) {
   console.log("Receiving Serial Data: " + data);
     var serialdata = data.split('~');
-    var serialid = serialdata[0];
-    var serialactive = serialdata[1];
+    var devicetype = serialdata[0];
+    var serialid = serialdata[1];
+    var serialactive = serialdata[2];
+  
 
+// FROM ARDUINO: devicetype~serialid~serialactive
+// CURRENT DEVICE TYPES:
+// - switch
+// - gas
+// - motion
 
-// MQ9 GAS SENSOR
-   if (serialid == 'gas'){
-        io.sockets.emit('relayCallback', {id: serialid, active: serialactive, type: 'gas'});
-            if (serialactive == 1){
+// SEND TO FRONT
+
+  io.sockets.emit('relayCallback', {id: serialid, active: serialactive, type: devicetype});
+           
+
+// DEVICE TYPE SPLITS FOR AUDIO
+
+  if (devicetype == 'gas'){     
+              if (serialactive == 1){
               //GAS DETECTED!!
-              new Sound().play('/home/pi/node/public/audio/224.wav');
+                new Sound().play('/home/pi/node/public/audio/224.wav');
               }
-    } else {
-        io.sockets.emit('relayCallback', {id: serialid, active: serialactive, type: 'serial'});
+  } else if (devicetype == 'motion'){ 
+              if (serialactive == 1){
+              //MOTION DETECTED!
+                new Sound().play('/home/pi/node/public/audio/219.wav');
+              }
+  } else {
             if (serialactive == 1){
-              new Sound().play('/home/pi/node/public/audio/219.wav');
+              //SERIAL SWITCH ACTIVATED
+                new Sound().play('/home/pi/node/public/audio/219.wav');
               } else {
-              new Sound().play('/home/pi/node/public/audio/225.wav');
+                new Sound().play('/home/pi/node/public/audio/225.wav');
               }
       }
 });
@@ -160,7 +177,7 @@ function pingall(){
   pings('10.0.0.30', '1');
   pings('10.0.0.31', '2');
   pings('10.0.0.11', '3');
-  pings('10.0.0.1', '4');
+  pings('10.0.0.2', '4');
 };  
 
 // INTERVAL PING
@@ -216,7 +233,7 @@ pingall();
   socket.on('relaycmd', function (data) { 
 
       var id = data.id;
-      var id = id.replace(/wol|local|gas|serial/g, '');
+      var id = id.replace(/wol|local|gas|switch/g, '');
       var type = data.type;
       var wake = data.wake;
       var wake = wake.replace(/-/g, '\:');
@@ -277,7 +294,6 @@ pingall();
 // WAKE ON LAN
 // -------------------------------------------------------------------------------
 
-
     } else if (type == 'wol') {
             console.log(wake);
             wol.wake(wake);
@@ -286,14 +302,12 @@ pingall();
             new Sound().play('/home/pi/node/public/audio/215.wav');
 
 
-// SERIAL REMOTE HC12 TRANSPONDERS (NOT FINISHED)
+// SEND TO SERIAL REMOTE HC12 TRANSPONDERS (ONLY ID, ARDUINO WILL CHECK IF HIGH OR LOW)
 // -------------------------------------------------------------------------------
 
-    } else if (type == 'serial') {
+    } else if (type == 'switch') {
             write(id + "\n");
             io.sockets.emit('relayCallback', {id: id, active: 4, type: type});
-           new Sound().play('/home/pi/node/public/audio/202.wav');
-
     }
         
         function write(message) {
