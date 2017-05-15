@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>NODEJS HOME AUTOMATIONS V1.0</title>
+<title>NODEJS HOME AUTOMATIONS V1.4</title>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -687,7 +687,7 @@ function relay(obj){
 				// SERIAL SWITCH BUTTONS
 					} else if (type == 'switch') {
 						document.getElementById(type + id).style.backgroundColor = "#7c00b2";
-						Feedback.innerHTML = "<h1>REMOTE SERIAL "+id+" CALL ON</h1>";
+						Feedback.innerHTML = "<h1>SERIAL "+id+" ON</h1>";
 				// RELAY BUTTONS
 					} else if (type == 'local') {
 						document.getElementById(type + id).style.backgroundColor = "#00b235";
@@ -715,7 +715,7 @@ function relay(obj){
 						document.getElementById(type + id).style.backgroundColor = "#bb1313";
 				// SERIAL SWITCH BUTTONS
 					} else if (type == 'switch') {
-						Feedback.innerHTML = "<h1>REMOTE SERIAL "+id+" CALL OFF</h1>";
+						Feedback.innerHTML = "<h1>SERIAL "+id+" OFF</h1>";
 						document.getElementById(type + id).style.backgroundColor = "#bb1313";
 				// RELAY BUTTONS
 					} else if (type == 'local') {
