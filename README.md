@@ -79,22 +79,13 @@ Install Firefox R-Kiosk add-on from within iceweasel:<br>
 https://addons.mozilla.org/en-us/firefox/addon/r-kiosk/
 <br><br>
 
-For keeping screen from going in stand-by edit:<br>
-/etc/lightdm/lightdm.conf<br><br>
+For keeping screen from going in stand-by:<br><br>
 
-in the SeatDefaults section it gives the command for starting the X server which I modified to get it to turn off the screen saver as well as dpms<br><br>
+apt-get install xscreensaver<br><br>
 
-[SeatDefaults]<br><br>
+In the [Display Mode] tab, set like this - Mode: [Disable Screen Saver]<br><br>
 
-xserver-command=X -s 0 -dpms<br><br>
 
--OR-
-
-Edit the file /etc/kbd/config Change these lines:<br>
-BLANK_TIME=0<br>
-BLANK_DPMS=off<br>
-POWERDOWN_TIME=0<br>
-<br><br>
 
 #Auto boot NodeJS app on startup
 
