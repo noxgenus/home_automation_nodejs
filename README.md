@@ -87,45 +87,11 @@ In the [Display Mode] tab, set like this - Mode: [Disable Screen Saver]<br><br>
 
 
 
-#Auto boot NodeJS app on startup
+#### Boot node script on startup:<br>
+`$ sudo npm install -g forever`<br>
+`$ sudo npm install -g forever-service`<br><br>
 
-cd /etc/init.d<br>
-nano boothomeauto<br>
-
-Paste this:<br><br>
-
-```
-#!/bin/sh
-#/etc/init.d/boothomeauto
-export PATH=$PATH:/home/pi/node
-export NODE_PATH=$NODE_PATH:/home/pi/node/node_modules
-
-case "$1" in
-start)
-exec forever --sourceDir=/home/pi/node -p /home/pi/node homeauto.js  #scriptarguments
-;;
-stop)
-exec forever stop --sourceDir=/home/pi/node homeauto.js
-;;
-*)
-echo "Usage: /etc/init.d/boothomeauto {start|stop}"
-exit 1
-;;
-esac
-exit 0
-```
-
-chmod 755 /etc/init.d/boothomeauto<br><br>
-
-Test it:<br>
-
-sh /etc/init.d/boothomeauto start<br><br>
-
-Make it bootable:<br>
-
-update-rc.d boothomeauto defaults<br><br>
-
-To remove it from boot:<br>
-
-update-rc.d -f boothomeauto remove<br><br>
+To install NodeJS script as a service:<br>
+`$ cd /your/path/to/script`<br>
+`$ sudo forever-service install mirrorservice --script mirror.js`<br>
 
