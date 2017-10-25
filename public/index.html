@@ -84,6 +84,9 @@ border:0;
 position:relative;
 box-sizing: border-box;
 }
+#topholder:after {
+clear:both;
+}
 #holder {
 width:100%;
 display:block;
@@ -94,7 +97,7 @@ padding:0;
 border:0;
 box-sizing: border-box;
 }
-#holdermotion {
+#holdermotion, #holderweather {
 width:100%;
 display:none;
 background:#151515;
@@ -209,7 +212,7 @@ text-align:center;
 user-select: none !important;
 }
 
-#feedbackholder, #feedbackholderR, #feedbackholderM, #feedbackholderOpenClose {
+#feedbackholder, #feedbackholderR, #feedbackholderM, #feedbackholderOpenClose, #feedbackholderOpenCloseWeather {
 display:block;
 width:100%;
 padding:10px;
@@ -223,7 +226,7 @@ text-transform:uppercase;
 color: #c5c5c5;
 background: #222;
 }
-#gasalarm, #motionOpen, #motionClose {
+#gasalarm, #motionOpen, #motionClose, #weatherOpen, #weatherClose {
 display:block;
 width:100%;
 height:30px;
@@ -329,10 +332,10 @@ text-align:center;
    margin:0px 0px 5px 0px; 
 }
 
-#feedbackholder, #feedbackholderR, #feedbackholderM, #feedbackholderOpenClose {
+#feedbackholder, #feedbackholderR, #feedbackholderM, #feedbackholderOpenClose, #feedbackholderOpenCloseWeather {
 display:block;
 width:100%;
-padding:10px;
+padding:8px;
 margin:0 0px 5px 0;
 border:2px solid #4292f4;
 box-sizing: border-box;
@@ -411,7 +414,7 @@ box-sizing: border-box;
 height:100%;
 overflow-x:hidden;
 }
-#holdermotion {
+#holdermotion, #holderweather {
 display:none;
 position:relative;
 width:100%;
@@ -502,7 +505,7 @@ user-select: none !important;
    margin:0px 0px 5px 0px; 
 }
 
-#feedbackholder, #feedbackholderR, #feedbackholderM, #feedbackholderOpenClose {
+#feedbackholder, #feedbackholderR, #feedbackholderM, #feedbackholderOpenClose, #feedbackholderOpenCloseWeather {
 display:block;
 width:100%;
 padding:5px;
@@ -524,7 +527,7 @@ height: 52px;
 	padding:0;
 }
 
-#gasalarm, #motionOpen, #motionClose {
+#gasalarm, #motionOpen, #motionClose, #weatherOpen, #weatherClose {
 display:block;
 width:100%;
 height:48px;
@@ -534,15 +537,19 @@ height:48px;
 
 #feedbackholder {
 display:block;
-width:55%;
+width:60%;
 float: left;
 }
 #feedbackholderM {
 display:block;
-width:10%;
+width:16%;
 float: right;
 border-left:none;
 text-align: center;
+font-size: 2.5em;
+line-height: 36px;
+box-sizing: border-box;
+padding:5px;
 }
 #feedbackholderR {
 display:block;
@@ -551,9 +558,9 @@ float: right;
 border-left:none;
 text-align: center;
 }
-#feedbackholderOpenClose {
+#feedbackholderOpenClose, #feedbackholderOpenCloseWeather {
 display:block;
-width:10%;
+width:12%;
 float: right;
 border-left:none;
 text-align: center;
@@ -562,16 +569,105 @@ text-align: center;
 color: #ff7200;
 }
 
-#motionOpen {
+#motionOpen, #weatherOpen {
 background-color: #00b235;
+font-size: 0.6em;
+line-height: 30px;
 }
-.motion {
+.motion, .weather {
 	background-color: #888;
 }
+
+.values {
+background-color: #222;
+color: #ccc;
+margin:5px;
+font-size: 2.0em;
+}
+
+  /* WEATHER SHIT */
+
+  .icon-0:before { content: ":"; }
+  .icon-1:before { content: "p"; }
+  .icon-2:before { content: "S"; }
+  .icon-3:before { content: "Q"; }
+  .icon-4:before { content: "S"; }
+  .icon-5:before { content: "W"; }
+  .icon-6:before { content: "W"; }
+  .icon-7:before { content: "W"; }
+  .icon-8:before { content: "W"; }
+  .icon-9:before { content: "I"; }
+  .icon-10:before { content: "W"; }
+  .icon-11:before { content: "I"; }
+  .icon-12:before { content: "I"; }
+  .icon-13:before { content: "I"; }
+  .icon-14:before { content: "I"; }
+  .icon-15:before { content: "W"; }
+  .icon-16:before { content: "I"; }
+  .icon-17:before { content: "W"; }
+  .icon-18:before { content: "U"; }
+  .icon-19:before { content: "Z"; }
+  .icon-20:before { content: "Z"; }
+  .icon-21:before { content: "Z"; }
+  .icon-22:before { content: "Z"; }
+  .icon-23:before { content: "Z"; }
+  .icon-24:before { content: "E"; }
+  .icon-25:before { content: "E"; }
+  .icon-26:before { content: "3"; }
+  .icon-27:before { content: "a"; }
+  .icon-28:before { content: "A"; }
+  .icon-29:before { content: "a"; }
+  .icon-30:before { content: "A"; }
+  .icon-31:before { content: "6"; }
+  .icon-32:before { content: "1"; }
+  .icon-33:before { content: "6"; }
+  .icon-34:before { content: "1"; }
+  .icon-35:before { content: "W"; }
+  .icon-36:before { content: "1"; }
+  .icon-37:before { content: "S"; }
+  .icon-38:before { content: "S"; }
+  .icon-39:before { content: "S"; }
+  .icon-40:before { content: "M"; }
+  .icon-41:before { content: "W"; }
+  .icon-42:before { content: "I"; }
+  .icon-43:before { content: "W"; }
+  .icon-44:before { content: "a"; }
+  .icon-45:before { content: "S"; }
+  .icon-46:before { content: "U"; }
+  .icon-47:before { content: "S"; }
+
+
+    /* CLOCK SHIT */
+
+
+
+  #point { 
+    position:relative; -moz-animation:mymove 1s ease infinite; -webkit-animation:mymove 1s ease infinite; 
+    padding-left:2px;
+    padding-right:2px; }
+
+
+    @-webkit-keyframes mymove 
+    {
+    0% {opacity:1.0; text-shadow:0 0 20px #00c6ff;}
+    50% {opacity:0; text-shadow:none; }
+    100% {opacity:1.0; text-shadow:0 0 20px #00c6ff; }  
+    }
+
+
+    @-moz-keyframes mymove 
+    {
+    0% {opacity:1.0; text-shadow:0 0 20px #00c6ff;}
+    50% {opacity:0; text-shadow:none; }
+    100% {opacity:1.0; text-shadow:0 0 20px #00c6ff; }  
+    }
+
 
 </style>
 
 <script src="socket.io/socket.io.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.simpleWeather.min.js"></script>
 
 </head>
 <body>
@@ -586,25 +682,32 @@ background-color: #00b235;
 		</div>
 
 		<div id="feedbackholderM">
-			<span id="gasalarm"></span>
-		</div>
-
-		<div id="feedbackholderR">
-			<span id="feedbackR"><h1>---</h1></span>
+				<span id="hours"> </span>
+              	<span id="point">:</span>
+              	<span id="min"> </span>
+             	<span id="point">:</span>
+				<span id="sec"> </span>
 		</div>
 
 		<div id="feedbackholderOpenClose">
-			<span id="motionOpen" onclick="openMotion();"> </span>
+			<span id="motionOpen" onclick="openMotion();"> motion </span>
+		</div>
+
+		<div id="feedbackholderOpenCloseWeather">
+			<span id="weatherOpen" onclick="openWeather();"> atmosphere </span>
 		</div>
 
 	</div>
+	<div class="clearall"></div>
 
 	<div id="holder">
 
 		<div class="butt" id="wol4" btype="wol" wake="E8-94-F6-68-4D-D6" onclick="relay(this)"> MAIN ROUTER </div> 
 		<div class="butt" id="wol1" btype="wol" wake="6C-F0-49-E6-73-EB" onclick="relay(this)"> WORKSTATION 1</div> 
-		<div class="butt" id="wol2" btype="wol" wake="C0-3F-D5-6B-31-F4" onclick="relay(this)"> WORKSTATION 2 </div> 
+		<div class="butt" id="wol2" btype="wol" wake="00-1C-C0-A2-66-EA" onclick="relay(this)"> WORKSTATION 2 </div> 
 		<div class="butt" id="wol3" btype="wol" wake="B8-27-EB-28-E2-2E" onclick="relay(this)"> MEDIA PI2 </div>
+		<div class="butt" id="wol5" btype="wol" wake="B8-27-EB-28-E2-2E" onclick="relay(this)"> FILE SERVER </div>
+		<div class="butt" id="wol6" btype="wol" wake="E8-AB-FA-2D-28-3A" onclick="relay(this)"> NXGCAM </div>
 
 
 		<div class="butt" id="local1" btype="local" wake="" onclick="relay(this)"> NODE1 </div> 
@@ -615,6 +718,13 @@ background-color: #00b235;
 		<div class="butt" id="switch1" btype="switch" wake="" onclick="relay(this)"> PARKING </div>
 		<div class="butt" id="switch2" btype="switch" wake="" onclick="relay(this)"> SERIAL2 </div>
 		<div class="butt" id="switch3" btype="switch" wake="" onclick="relay(this)"> SERIAL3 </div>
+
+	</div>
+
+	<div id="holderweather">
+
+		<div class="values" id="internaltemp" > --- </div>
+		<div class="values" id="motion2" > --- </div>
 
 	</div>
 
@@ -632,21 +742,42 @@ background-color: #00b235;
 // CONNECT
 var socket = io.connect();
 var Feedback = document.getElementById("feedback");
-var TempHumid = document.getElementById("feedbackR");
+var TempHumid = document.getElementById("internaltemp");
 
 
 // OPEN/CLOSE MOTION FLOORMAP
+function openWeather(){
+    var div = document.getElementById("holder");
+		if (div.style.display !== "none") {
+			div.style.display = "none";
+			document.getElementById('holderweather').style.display = "block";
+			document.getElementById('holdermotion').style.display = "none";
+			document.getElementById('weatherOpen').style.backgroundColor = "#e57e00";
+		} else {
+    		div.style.display = "block";
+			document.getElementById('holderweather').style.display = "none";
+			document.getElementById('holdermotion').style.display = "none";
+			document.getElementById('weatherOpen').style.backgroundColor = "#00b235";
+			document.getElementById('motionOpen').style.backgroundColor = "#00b235";
+		}
+ 	}
+
+// OPEN/CLOSE WEATHER
 function openMotion(){
     var div = document.getElementById("holder");
 		if (div.style.display !== "none") {
 			div.style.display = "none";
 			document.getElementById('holdermotion').style.display = "block";
+			document.getElementById('holderweather').style.display = "none";
+			document.getElementById('motionOpen').style.backgroundColor = "#e57e00";
 		} else {
     		div.style.display = "block";
 			document.getElementById('holdermotion').style.display = "none";
+			document.getElementById('holderweather').style.display = "none";
+			document.getElementById('weatherOpen').style.backgroundColor = "#00b235";
+			document.getElementById('motionOpen').style.backgroundColor = "#00b235";
 		}
  	}
-
 
 // EMIT ID TO BACKEND
 function relay(obj){
@@ -664,7 +795,32 @@ function relay(obj){
        	var humid = data.humid
 
 		// TEMP/HUMID SENSOR
-		TempHumid.innerHTML = "<h1>" + temp + "°C / " + humid + "%</h1>";
+		TempHumid.innerHTML = "<h1>TEMP: " + temp + "°C / HUMID: " + humid + "%</h1>";
+
+		if (temp > 28) {
+		document.getElementById('weatherOpen').style.backgroundColor = "#bb1313";
+			}
+
+
+	// Yahoo weather plugin, refreshes every 10 secs with temp update from backend
+      $.simpleWeather({
+        woeid: '727132', 
+        location: '',
+        unit: 'c',
+        success: function(weather) {      
+          html = '<div class="home"><img src="data/img/home.png" /><p>'+ temp + '&deg;'+weather.units.temp+'</p></div><div class="today"><i class="icon-'+weather.code+'"></i><p>'+weather.temp+'&deg;'+weather.units.temp+'</p></div><div class="clear"></div>';
+          
+          for(var i=1;i<7;i++) {
+            html += '<div class="weekdays"><i class="icon-'+weather.forecast[i].code+'"></i><p class="small">'+weather.forecast[i].day+'</p><p>'+weather.forecast[i].high+'&deg;'+weather.units.temp+'</p></div>';
+          }
+              $("#weather").html(html);
+        },
+        error: function(error) {
+          $("#weather").html('<div class="error"><p>'+error+'</p></div>');
+        }
+      });
+
+
 	});
 
 
@@ -694,7 +850,7 @@ function relay(obj){
 						Feedback.innerHTML = "<h1>Node "+id+" ON</h1>";
 				// GAS SENSORS
 					} else if (type == 'gas') {
-						document.getElementById('gasalarm').style.backgroundColor = "#bb1313";
+						//document.getElementById('gasalarm').style.backgroundColor = "#bb1313";
 						Feedback.innerHTML = "<h1>Gas Detected!</h1>";
 				// MOTION SENSORS
 					} else if (type == 'motion') {
@@ -727,7 +883,7 @@ function relay(obj){
 				// MOTION SENSORS
 					} else if (type == 'motion') {
 						document.getElementById(type + id).style.backgroundColor = "#00b235";
-						document.getElementById('motionOpen').style.backgroundColor = "#00b235";
+						//document.getElementById('motionOpen').style.backgroundColor = "#00b235";
 				// ELSE ERROR
 					} else {
 						Feedback.innerHTML = "<h1>NODE "+id+" ERROR!</h1>";
@@ -743,9 +899,42 @@ function relay(obj){
 						Feedback.innerHTML = "<h1>SERIAL " + id + " </h1>";
 						document.getElementById(type + id).style.backgroundColor = "#e57e00";
 			}
+
+
+
+
+
+
+
 	});
 
 
+$(document).ready(function() {
+    // Clock with intervals
+        var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]; 
+        var dayNames= ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+        var newDate = new Date();
+        newDate.setDate(newDate.getDate());
+     
+        // $('#Date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' + newDate.getFullYear());
+
+
+        setInterval( function() {
+          var seconds = new Date().getSeconds();
+          $("#sec").html(( seconds < 10 ? "0" : "" ) + seconds);
+          },1000);
+          
+        setInterval( function() {
+          var minutes = new Date().getMinutes();
+          $("#min").html(( minutes < 10 ? "0" : "" ) + minutes);
+            },1000);
+          
+        setInterval( function() {
+          var hours = new Date().getHours();
+          $("#hours").html(( hours < 10 ? "0" : "" ) + hours);
+            }, 1000);
+
+});
     
 
 </script>

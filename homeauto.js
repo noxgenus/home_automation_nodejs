@@ -3,8 +3,15 @@ app = express();
 server = require('http').createServer(app);
 io = require('socket.io').listen(server);
 
-server.listen(8080);
-app.use(express.static('public'));     
+var path = require('path');
+//Look for statics first
+app.use(express.static(path.join(__dirname, 'public')));
+//Return the index for any other GET request
+app.get('/*', function (req, res) {
+    res.sendFile('index.html', {root: path.join(__dirname, 'public')});
+});
+
+server.listen(8080); 
 
 // AUDIO 
 // -------------------------------------------------------------------------------
@@ -158,13 +165,13 @@ function pings(host, id) {
 // Only send relayCallback with active status if pingstatus has changed
 
         if ((isAlive == true) && (pingstatus['pingstatus' + id] == true)) {
-            io.sockets.emit('relayCallback', {id: id, active: 1, type: 'wol'});
-            new Sound().play('/home/pi/node/public/audio/203.wav');
-            pingstatus['pingstatus' + id] = false;
+          io.sockets.emit('relayCallback', {id: id, active: 1, type: 'wol'});
+          new Sound().play('/home/pi/node/public/audio/203.wav');
+          pingstatus['pingstatus' + id] = false;
         } else if ((isAlive == false) && (pingstatus['pingstatus' + id] == false)){
-            io.sockets.emit('relayCallback', {id: id, active: 0, type: 'wol'});
-            new Sound().play('/home/pi/node/public/audio/204.wav');
-            pingstatus['pingstatus' + id] = true;
+          io.sockets.emit('relayCallback', {id: id, active: 0, type: 'wol'});
+          new Sound().play('/home/pi/node/public/audio/204.wav');
+          pingstatus['pingstatus' + id] = true;
         }
     });
 
@@ -174,10 +181,12 @@ function pings(host, id) {
 // SET PING INTERVAL FOR ALL CLIENTS (ip, buttonID)
 
 function pingall(){
-  pings('10.0.0.30', '1');
-  pings('10.0.0.31', '2');
-  pings('10.0.0.11', '3');
-  pings('10.0.0.2', '4');
+  pings('10.0.0.30', '1'); // main workstation
+  pings('10.0.0.31', '2');  // Workstation i7 2
+  pings('10.0.0.11', '3');  // Torrentpi
+  pings('10.0.0.2', '4'); // 2nd ROUTER
+  pings('10.0.0.4', '5'); // QUAD
+   pings('10.0.0.9', '6'); // NXGCAM
 };  
 
 // INTERVAL PING
