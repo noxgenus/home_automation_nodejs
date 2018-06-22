@@ -14,6 +14,8 @@
 
 <style>
 
+
+
 *{ 
 margin:0; 
 padding:0; 
@@ -28,6 +30,19 @@ url('../data/fonts/akzidenzgroteskbe-cn-webfont.svg#berthold_akzidenz_groteskCn'
 font-weight: normal;
 font-style: normal;
 }
+
+  @font-face {
+      font-family: 'weather';
+      src: url('../data/fonts/artill_clean_icons-webfont.eot');
+      src: url('../data/fonts/artill_clean_icons-webfont.eot?#iefix') format('embedded-opentype'),
+           url('../data/fonts/artill_clean_icons-webfont.woff2') format('woff2'),
+           url('../data/fonts/artill_clean_icons-webfont.woff') format('woff'),
+           url('../data/fonts/artill_clean_icons-webfont.ttf') format('truetype'),
+           url('../data/fonts/artill_clean_icons-webfont.svg#artill_clean_weather_iconsRg') format('svg');
+      font-weight: normal;
+      font-style: normal;
+
+  }
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 abbr, address, cite, code,
@@ -232,6 +247,56 @@ width:100%;
 height:30px;
 }
 
+#feedbackholder {
+display:block;
+width:60%;
+float: left;
+}
+#feedbackholderM {
+display:block;
+width:16%;
+float: right;
+border-left:none;
+text-align: center;
+font-size: 2.5em;
+line-height: 36px;
+box-sizing: border-box;
+padding:5px;
+}
+#feedbackholderR {
+display:block;
+width:25%;
+float: right;
+border-left:none;
+text-align: center;
+}
+#feedbackholderOpenClose, #feedbackholderOpenCloseWeather {
+display:block;
+width:12%;
+float: right;
+border-left:none;
+text-align: center;
+}
+#feedbackholderR h1{
+color: #ff7200;
+}
+
+#motionOpen, #weatherOpen {
+background-color: #00b235;
+font-size: 0.6em;
+line-height: 30px;
+}
+.motion, .weather {
+  background-color: #888;
+}
+
+.values {
+background-color: #222;
+color: #ccc;
+margin:5px;
+font-size: 2.0em;
+}
+
 
 
 
@@ -357,10 +422,67 @@ height:50px;
 	padding:0;
 }
 
+
+#gasalarm, #motionOpen, #motionClose, #weatherOpen, #weatherClose {
+display:block;
+width:100%;
+height:30px;
+}
+
+#feedbackholder {
+display:block;
+width:60%;
+float: left;
+}
+#feedbackholderM {
+display:block;
+width:16%;
+float: right;
+border-left:none;
+text-align: center;
+font-size: 2.5em;
+line-height: 36px;
+box-sizing: border-box;
+padding:5px;
+}
+#feedbackholderR {
+display:block;
+width:25%;
+float: right;
+border-left:none;
+text-align: center;
+}
+#feedbackholderOpenClose, #feedbackholderOpenCloseWeather {
+display:block;
+width:12%;
+float: right;
+border-left:none;
+text-align: center;
+}
+#feedbackholderR h1{
+color: #ff7200;
+}
+
+#motionOpen, #weatherOpen {
+background-color: #00b235;
+font-size: 0.6em;
+line-height: 30px;
+}
+.motion, .weather {
+  background-color: #888;
+}
+
+.values {
+background-color: #222;
+color: #ccc;
+margin:5px;
+font-size: 2.0em;
+}
+
 }
 
 
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 640px) {
 
 *{ 
 margin:0; 
@@ -519,6 +641,7 @@ text-transform:uppercase;
 color: #c5c5c5;
 background: #222;
 height: 52px;
+z-index: 100;
 }
 #feedbackholderR{
 	font-size: 1.2em;
@@ -533,18 +656,17 @@ width:100%;
 height:48px;
 }
 
-}
 
 #feedbackholder {
 display:block;
-width:60%;
+width:100%;
 float: left;
 }
 #feedbackholderM {
 display:block;
-width:16%;
+width:49%;
 float: right;
-border-left:none;
+border-right:none;
 text-align: center;
 font-size: 2.5em;
 line-height: 36px;
@@ -553,14 +675,14 @@ padding:5px;
 }
 #feedbackholderR {
 display:block;
-width:25%;
+width:49%;
 float: right;
 border-left:none;
 text-align: center;
 }
 #feedbackholderOpenClose, #feedbackholderOpenCloseWeather {
 display:block;
-width:12%;
+width:25%;
 float: right;
 border-left:none;
 text-align: center;
@@ -572,10 +694,11 @@ color: #ff7200;
 #motionOpen, #weatherOpen {
 background-color: #00b235;
 font-size: 0.6em;
-line-height: 30px;
+line-height: 40px;
+height:40px;
 }
 .motion, .weather {
-	background-color: #888;
+  background-color: #888;
 }
 
 .values {
@@ -584,6 +707,10 @@ color: #ccc;
 margin:5px;
 font-size: 2.0em;
 }
+
+}
+
+
 
   /* WEATHER SHIT */
 
@@ -636,7 +763,76 @@ font-size: 2.0em;
   .icon-46:before { content: "U"; }
   .icon-47:before { content: "S"; }
 
+#weather {
+  font-family: 'berthold_akzidenz_groteskCn';
+    margin: 0 0 0px 0;
+    padding:  0;
+    display:block;
+        transition: all 0.5s;
+    -moz-transition: all 0.5s; /* Firefox 4 */
+    -webkit-transition: all 0.5s; /* Safari and Chrome */
+    -o-transition: all 0.5s; /* Opera */
+  }
+  #weather i{
+    font-family: 'weather';
+    font-style: normal;
+  }
+  #weather div.home {
+    margin: 0px auto 0px 0;
+    padding:  0;
+    display:block;
+    width: 20%;
+    text-align: center;
+    float:left;
+  }
+  #weather div.home img {
+  display: block;
+  width: 30%;
+  margin: 12px auto;
+  }
+  #weather div.home p {
+   font-size: 40px;
+  }
 
+  #weather div.today {
+    margin: 0px 0 0px auto;
+    padding:  0;
+    display:block;
+    width: 20%;
+    text-align: center;
+  }
+  #weather div.clear {
+  clear: both;
+  }
+  #weather div.today p {
+   font-size: 40px;
+  }
+
+  #weather div.today i {
+    font-size: 100px;
+    line-height:100px;
+    margin-top:20px;
+  }
+
+  #weather div.weekdays {
+    margin: 50px 0 0 5%;
+    padding: 0;
+    display:block;
+    float:left;
+    width:11%;
+    text-align: center;
+  }
+
+  #weather div.weekdays p {
+   font-size: 40px;
+  }
+  #weather div.weekdays p.small {
+   font-size: 10px;
+  }
+
+  #weather div.weekdays i {
+    font-size: 50px;
+  }
     /* CLOCK SHIT */
 
 
@@ -690,7 +886,7 @@ font-size: 2.0em;
 		</div>
 
 		<div id="feedbackholderOpenClose">
-			<span id="motionOpen" onclick="openMotion();"> motion </span>
+			<span id="motionOpen" onclick="openMotion();"> cams </span>
 		</div>
 
 		<div id="feedbackholderOpenCloseWeather">
@@ -724,14 +920,16 @@ font-size: 2.0em;
 	<div id="holderweather">
 
 		<div class="values" id="internaltemp" > --- </div>
-		<div class="values" id="motion2" > --- </div>
+     <div id="weather"></div>
+		
 
 	</div>
 
 	<div id="holdermotion">
 
-		<div class="butt motion" id="motion1" > Motion Room 1 </div>
-		<div class="butt motion" id="motion2" > Motion Room 2 </div>
+    <img style="display:block;position:fixed;bottom:0;right:0;width:100%;height:100%;z-index:-2;" src='http://10.0.0.10:1815' />
+		<!-- <div class="butt motion" id="motion1" > Motion Room 1 </div>
+		<div class="butt motion" id="motion2" > Motion Room 2 </div> -->
 
 	</div>
 
@@ -808,7 +1006,7 @@ function relay(obj){
         location: '',
         unit: 'c',
         success: function(weather) {      
-          html = '<div class="home"><img src="data/img/home.png" /><p>'+ temp + '&deg;'+weather.units.temp+'</p></div><div class="today"><i class="icon-'+weather.code+'"></i><p>'+weather.temp+'&deg;'+weather.units.temp+'</p></div><div class="clear"></div>';
+          html = '<div class="home"><img src="../data/img/home.png" /><p>'+ temp + '&deg;'+weather.units.temp+'</p></div><div class="today"><i class="icon-'+weather.code+'"></i><p>'+weather.temp+'&deg;'+weather.units.temp+'</p></div><div class="clear"></div>';
           
           for(var i=1;i<7;i++) {
             html += '<div class="weekdays"><i class="icon-'+weather.forecast[i].code+'"></i><p class="small">'+weather.forecast[i].day+'</p><p>'+weather.forecast[i].high+'&deg;'+weather.units.temp+'</p></div>';
