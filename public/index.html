@@ -259,7 +259,7 @@ float: right;
 border-left:none;
 text-align: center;
 font-size: 2.5em;
-line-height: 36px;
+line-height: 40px;
 box-sizing: border-box;
 padding:5px;
 }
@@ -710,6 +710,40 @@ font-size: 2.0em;
 
 }
 
+.blink{
+  -webkit-animation: blinkie 0.2s infinite;  /* Safari 4+ */
+  -moz-animation: blinkie 0.2s infinite;  /* Fx 5+ */
+  -o-animation: blinkie 0.2s infinite;  /* Opera 12+ */
+  animation: blinkie 0.2s infinite;  /* IE 10+, Fx 29+ */
+}
+
+@-webkit-keyframes blinkie {
+  0%, 49% {
+    background-color: #e57e00;
+  }
+  50%, 100% {
+    background-color: #000;
+  
+  }
+}
+
+
+.dangerWillRobinson{
+  -webkit-animation: danger 0.2s infinite;  /* Safari 4+ */
+  -moz-animation: danger 0.2s infinite;  /* Fx 5+ */
+  -o-animation: danger 0.2s infinite;  /* Opera 12+ */
+  animation: danger 0.2s infinite;  /* IE 10+, Fx 29+ */
+}
+
+@-webkit-keyframes danger {
+  0%, 49% {
+    background-color: #ff0000;
+  }
+  50%, 100% {
+    background-color: #000;
+  
+  }
+}
 
 
   /* WEATHER SHIT */
@@ -862,8 +896,7 @@ font-size: 2.0em;
 </style>
 
 <script src="socket.io/socket.io.js"></script>
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery.simpleWeather.min.js"></script>
+
 
 </head>
 <body>
@@ -874,7 +907,7 @@ font-size: 2.0em;
 
 		<div id="feedbackholder">
 			<h1 class="prefix">Last status: </h1>
-			<span id="feedback"><h1>No Connection with back-end</h1></span>
+			<span id="feedback"><h1>No Connection with server</h1></span>
 		</div>
 
 		<div id="feedbackholderM">
@@ -898,38 +931,39 @@ font-size: 2.0em;
 
 	<div id="holder">
 
-		<div class="butt" id="wol4" btype="wol" wake="E8-94-F6-68-4D-D6" onclick="relay(this)"> MAIN ROUTER </div> 
+    <div class="butt" id="switch1" btype="switch" wake="" onclick="relay(this)"> LIGHTS 1 </div>
+    <div class="butt" id="switch2" btype="switch" wake="" onclick="relay(this)"> LIGHTS 2 </div>
+    <div class="butt" id="switch3" btype="switch" wake="" onclick="relay(this)"> LIGHTS 3 </div>
+    <div class="butt" id="switch4" btype="switch" wake="" onclick="relay(this)"> LIGHTS 4 </div>
+
+    <div class="butt" id="local1" btype="local" wake="" onclick="relay(this)"> NODE 1 </div> 
+    <div class="butt" id="local2" btype="local" wake="" onclick="relay(this)"> NODE 2 </div> 
+    <div class="butt" id="local3" btype="local" wake="" onclick="relay(this)"> NODE 3 </div> 
+    <div class="butt" id="local4" btype="local" wake="" onclick="relay(this)"> NODE 4 </div>
+
+		<div class="butt" id="wol4" btype="wol" wake="E8-94-F6-68-4D-D6" onclick="relay(this)"> VPN ROUTER </div> 
 		<div class="butt" id="wol1" btype="wol" wake="6C-F0-49-E6-73-EB" onclick="relay(this)"> WORKSTATION 1</div> 
 		<div class="butt" id="wol2" btype="wol" wake="00-1C-C0-A2-66-EA" onclick="relay(this)"> WORKSTATION 2 </div> 
-		<div class="butt" id="wol3" btype="wol" wake="B8-27-EB-28-E2-2E" onclick="relay(this)"> MEDIA PI2 </div>
+		<div class="butt" id="wol3" btype="wol" wake="B8-27-EB-28-E2-2E" onclick="relay(this)"> WORKSTATION 3 </div>
 		<div class="butt" id="wol5" btype="wol" wake="B8-27-EB-28-E2-2E" onclick="relay(this)"> FILE SERVER </div>
 		<div class="butt" id="wol6" btype="wol" wake="E8-AB-FA-2D-28-3A" onclick="relay(this)"> NXGCAM </div>
 
 
-		<div class="butt" id="local1" btype="local" wake="" onclick="relay(this)"> NODE1 </div> 
-		<div class="butt" id="local2" btype="local" wake="" onclick="relay(this)"> NODE2 </div> 
-		<div class="butt" id="local3" btype="local" wake="" onclick="relay(this)"> NODE3 </div> 
-		<div class="butt" id="local4" btype="local" wake="" onclick="relay(this)"> NODE4 </div>
-
-		<div class="butt" id="switch1" btype="switch" wake="" onclick="relay(this)"> PARKING </div>
-		<div class="butt" id="switch2" btype="switch" wake="" onclick="relay(this)"> SERIAL2 </div>
-		<div class="butt" id="switch3" btype="switch" wake="" onclick="relay(this)"> SERIAL3 </div>
 
 	</div>
 
 	<div id="holderweather">
 
 		<div class="values" id="internaltemp" > --- </div>
-     <div id="weather"></div>
-		
 
 	</div>
 
 	<div id="holdermotion">
 
-    <img style="display:block;position:fixed;bottom:0;right:0;width:100%;height:100%;z-index:-2;" src='http://10.0.0.10:1815' />
-		<!-- <div class="butt motion" id="motion1" > Motion Room 1 </div>
-		<div class="butt motion" id="motion2" > Motion Room 2 </div> -->
+<!--     <img style="display:block;position:fixed;bottom:0;right:0;width:100%;height:100%;z-index:-2;" src='http://10.0.0.9/11' /> -->
+
+  <video style="display:block;position:fixed;bottom:0;right:0;width:100%;height:100%;z-index:-2;" playsinline autoplay></video>
+
 
 	</div>
 
@@ -943,6 +977,39 @@ var Feedback = document.getElementById("feedback");
 var TempHumid = document.getElementById("internaltemp");
 
 
+
+// CAM STUFF
+const video = document.querySelector('video');
+const canvas = window.canvas = document.querySelector('canvas');
+canvas.width = 480;
+canvas.height = 360;
+
+const button = document.querySelector('button');
+button.onclick = function() {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+};
+
+const constraints = {
+  audio: false,
+  video: true
+};
+
+function handleSuccess(stream) {
+  window.stream = stream; // make stream available to browser console
+  video.srcObject = stream;
+}
+
+function handleError(error) {
+  console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
+}
+
+navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+
+
+
+
 // OPEN/CLOSE MOTION FLOORMAP
 function openWeather(){
     var div = document.getElementById("holder");
@@ -951,12 +1018,14 @@ function openWeather(){
 			document.getElementById('holderweather').style.display = "block";
 			document.getElementById('holdermotion').style.display = "none";
 			document.getElementById('weatherOpen').style.backgroundColor = "#e57e00";
+      document.getElementById('weatherOpen').classList.remove("dangerWillRobinson");
 		} else {
     		div.style.display = "block";
 			document.getElementById('holderweather').style.display = "none";
 			document.getElementById('holdermotion').style.display = "none";
 			document.getElementById('weatherOpen').style.backgroundColor = "#00b235";
 			document.getElementById('motionOpen').style.backgroundColor = "#00b235";
+      document.getElementById('weatherOpen').classList.remove("dangerWillRobinson");
 		}
  	}
 
@@ -992,31 +1061,18 @@ function relay(obj){
        	var temp = data.temp
        	var humid = data.humid
 
+
 		// TEMP/HUMID SENSOR
 		TempHumid.innerHTML = "<h1>TEMP: " + temp + "°C / HUMID: " + humid + "%</h1>";
 
 		if (temp > 28) {
 		document.getElementById('weatherOpen').style.backgroundColor = "#bb1313";
-			}
+    document.getElementById('weatherOpen').classList.add("dangerWillRobinson");
+	   } else if (temp < 28) {
+    document.getElementById('weatherOpen').style.backgroundColor = "#e57e00";
+    document.getElementById('weatherOpen').classList.remove("dangerWillRobinson");
+     }
 
-
-	// Yahoo weather plugin, refreshes every 10 secs with temp update from backend
-      $.simpleWeather({
-        woeid: '727132', 
-        location: '',
-        unit: 'c',
-        success: function(weather) {      
-          html = '<div class="home"><img src="../data/img/home.png" /><p>'+ temp + '&deg;'+weather.units.temp+'</p></div><div class="today"><i class="icon-'+weather.code+'"></i><p>'+weather.temp+'&deg;'+weather.units.temp+'</p></div><div class="clear"></div>';
-          
-          for(var i=1;i<7;i++) {
-            html += '<div class="weekdays"><i class="icon-'+weather.forecast[i].code+'"></i><p class="small">'+weather.forecast[i].day+'</p><p>'+weather.forecast[i].high+'&deg;'+weather.units.temp+'</p></div>';
-          }
-              $("#weather").html(html);
-        },
-        error: function(error) {
-          $("#weather").html('<div class="error"><p>'+error+'</p></div>');
-        }
-      });
 
 
 	});
@@ -1028,20 +1084,27 @@ function relay(obj){
 		var id = data.id
        	var active = data.active
        	var type = data.type
+        var received = 0;
 
 
-    // ON
+  // ON
 
 	       	if (active == 1) {
 
 	       		// WAKE ON LAN BUTTONS
 					if (type == 'wol') {
 						document.getElementById(type + id).style.backgroundColor = "#0097b2";
+            document.getElementById(type + id).classList.remove("blink");
 						Feedback.innerHTML = "<h1>MACHINE ONLINE</h1>";
 				// SERIAL SWITCH BUTTONS
 					} else if (type == 'switch') {
-						document.getElementById(type + id).style.backgroundColor = "#7c00b2";
-						Feedback.innerHTML = "<h1>SERIAL "+id+" ON</h1>";
+						document.getElementById(type + id).style.backgroundColor = "#9348a9";
+            document.getElementById(type + id).classList.remove("blink");
+						Feedback.innerHTML = "<h1>LIGHTS "+id+" ON</h1>";
+
+            //clear timeout
+            received = 1;
+
 				// RELAY BUTTONS
 					} else if (type == 'local') {
 						document.getElementById(type + id).style.backgroundColor = "#00b235";
@@ -1057,9 +1120,10 @@ function relay(obj){
 						Feedback.innerHTML = "<h1>Motion Detected!</h1>";
 					} else {
 				// ELSE ERROR
-						Feedback.innerHTML = "<h1>Node "+id+" ERROR!</h1>";
+						Feedback.innerHTML = "<h1>MESSAGE "+id+" ERROR!</h1>";
 					}
-	// OFF
+
+// OFF
 
 			} else if (active == 0) {
 					
@@ -1067,10 +1131,12 @@ function relay(obj){
 					if (type == 'wol') {
 						Feedback.innerHTML = "<h1>MACHINE OFFLINE</h1>";
 						document.getElementById(type + id).style.backgroundColor = "#bb1313";
+            document.getElementById(type + id).classList.remove("blink");
 				// SERIAL SWITCH BUTTONS
 					} else if (type == 'switch') {
-						Feedback.innerHTML = "<h1>SERIAL "+id+" OFF</h1>";
+						Feedback.innerHTML = "<h1>LIGHTS "+id+" OFF</h1>";
 						document.getElementById(type + id).style.backgroundColor = "#bb1313";
+            document.getElementById(type + id).classList.remove("blink");
 				// RELAY BUTTONS
 					} else if (type == 'local') {
 						Feedback.innerHTML = "<h1>NODE "+id+" OFF</h1>";
@@ -1084,18 +1150,38 @@ function relay(obj){
 						//document.getElementById('motionOpen').style.backgroundColor = "#00b235";
 				// ELSE ERROR
 					} else {
-						Feedback.innerHTML = "<h1>NODE "+id+" ERROR!</h1>";
+						Feedback.innerHTML = "<h1>MESSAGE "+id+" ERROR!</h1>";
 					}
 
 
-	// TEMP BOOTING WAKEONLAN/SERIAL WAIT STATUS 
+
+// TEMP BOOTING WAKEONLAN/SERIAL WAIT STATUS 
 
 			} else if (active == 3) {			
 						Feedback.innerHTML = "<h1>MACHINE BOOTING</h1>";
 						document.getElementById(type + id).style.backgroundColor = "#e57e00";
+            document.getElementById(type + id).classList.add("blink");
+                  // IF NO SIGNAL RETURNS, INDICATE ID IS DOWN
+                  setTimeout(function(){ 
+                     if (document.getElementById(type + id).classList.contains("blink")){
+                        Feedback.innerHTML = "<h1>MACHINE " + id + " IS NOT RESPONDING!</h1>";
+                        document.getElementById(type + id).classList.remove("blink");
+                        document.getElementById(type + id).style.backgroundColor = "#700000";
+                      }
+                    }, 60000); // pc boot time?
+
 			} else if (active == 4) {			
-						Feedback.innerHTML = "<h1>SERIAL " + id + " </h1>";
-						document.getElementById(type + id).style.backgroundColor = "#e57e00";
+						Feedback.innerHTML = "<h1>LIGHTS " + id + " </h1>";
+            document.getElementById(type + id).classList.add("blink");
+                  // IF NO SIGNAL RETURNS, INDICATE ID IS DOWN
+                  setTimeout(function(){ 
+                    if (document.getElementById(type + id).classList.contains("blink")){
+                        Feedback.innerHTML = "<h1>LIGHTS " + id + " IS DOWN!</h1>";
+                        document.getElementById(type + id).classList.remove("blink");
+                        document.getElementById(type + id).style.backgroundColor = "#700000";
+                      }
+                    }, 10000);
+
 			}
 
 
@@ -1107,32 +1193,31 @@ function relay(obj){
 	});
 
 
-$(document).ready(function() {
-    // Clock with intervals
+
+// TIME CLOCK SHIT
+
         var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]; 
         var dayNames= ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
         var newDate = new Date();
         newDate.setDate(newDate.getDate());
-     
-        // $('#Date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' + newDate.getFullYear());
 
 
         setInterval( function() {
           var seconds = new Date().getSeconds();
-          $("#sec").html(( seconds < 10 ? "0" : "" ) + seconds);
+          document.getElementById("sec").innerHTML = (( seconds < 10 ? "0" : "" ) + seconds);
           },1000);
           
         setInterval( function() {
           var minutes = new Date().getMinutes();
-          $("#min").html(( minutes < 10 ? "0" : "" ) + minutes);
+          document.getElementById("min").innerHTML = (( minutes < 10 ? "0" : "" ) + minutes);
             },1000);
           
         setInterval( function() {
           var hours = new Date().getHours();
-          $("#hours").html(( hours < 10 ? "0" : "" ) + hours);
+          document.getElementById("hours").innerHTML = (( hours < 10 ? "0" : "" ) + hours);
             }, 1000);
 
-});
+
     
 
 </script>

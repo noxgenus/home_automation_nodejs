@@ -1,12 +1,18 @@
-var express = require('express');
-app = express();
-server = require('http').createServer(app);
-io = require('socket.io').listen(server);
+// -------------------------------------------------------------------------------
+// VWR NODEJS HOME AUTOMATION FOR PI LINUX BASED SYSTEMS
+// V2.9 FOR RASBIAN BUSTER (10)
+// -------------------------------------------------------------------------------
 
-var path = require('path');
-//Look for statics first
+
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
+
+const path = require('path');
+
 app.use(express.static(path.join(__dirname, 'public')));
-//Return the index for any other GET request
+
 app.get('/*', function (req, res) {
     res.sendFile('index.html', {root: path.join(__dirname, 'public')});
 });
@@ -30,61 +36,64 @@ var Gpio = require('pigpio').Gpio,
 
 // WAKE ON LAN
 // -------------------------------------------------------------------------------
-var wol = require('wake_on_lan');
+const wol = require('wake_on_lan');
 
 //PING UNDER ROOT
 // -------------------------------------------------------------------------------
-var ping = require('ping');
+const ping = require('ping');
 
 
-// SERIAL SETUP
+// SERIALPORT SETUP
 // -------------------------------------------------------------------------------
 
-var SerialPort = require("serialport");
-var parsers = SerialPort.parsers;
+const SerialPort = require('serialport')
+const Readline = require('@serialport/parser-readline')
+const port = new SerialPort('/dev/ttyUSB0', { 
+    baudRate: 9600
+    }, function (err) {
+      if (err) {
+        return console.log(err.message);
+      }
+    });
 
-var sp = new SerialPort('/dev/ttyAMA0', { 
-baudrate: 9600, 
-parser: parsers.readline('\r\n')
-}, function (err) {
-  if (err) {
-    return console.log(err.message);
-  }
-});
+const parser = port.pipe(new Readline({ delimiter: '\r\n' }))
+
 
 // SERIAL PORT RECEIVE
 // -------------------------------------------------------------------------------
 
 // OPEN PORT
-sp.open(function(err) {
+port.open(function(err) {
   if (err) {
       console.log(err);
       }
 });
 
 // CHECK IF OPEN
-sp.on('open', function() {
+port.on('open', function() {
   console.log('Port open');
 });
 
 // ON INCOMING DATA
-sp.on('data', function(data) {
+parser.on('data', function(data) {
   console.log("Receiving Serial Data: " + data);
-    var serialdata = data.split('~');
+    var serialdata = data.toString().split('~');
     var devicetype = serialdata[0];
     var serialid = serialdata[1];
     var serialactive = serialdata[2];
   
 
 // FROM ARDUINO: devicetype~serialid~serialactive
-// CURRENT DEVICE TYPES:
+// CURRENT REMOTE DEVICE TYPES:
 // - switch
 // - gas
 // - motion
+// - temp
 
 // SEND TO FRONT
 
   io.sockets.emit('relayCallback', {id: serialid, active: serialactive, type: devicetype});
+   
            
 
 // DEVICE TYPE SPLITS FOR AUDIO
@@ -321,7 +330,7 @@ pingall();
         
         function write(message) {
             console.log("Sending Serial Data: " + message);
-            sp.write(message, function(err, res) {
+            port.write(message, function(err, res) {
               if (err) {
                     console.log(err);
               }
