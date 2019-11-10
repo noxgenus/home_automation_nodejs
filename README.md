@@ -1,5 +1,5 @@
 # Home Automation NodeJS
-Raspberry Pi3 NodeJS based Home Automation System
+Raspberry Pi3 NodeJS based Home Automation System<br>
 
 GPIO and Serial based controller.
 GPIO buttons control 2/4 channel relay modules such as these: <br>
@@ -10,88 +10,87 @@ http://www.14core.com/wiring-the-hc11-hc12-434433mhz-transceiver/
 <br><br>
 
 
-# NodeJS installation/Config on Raspberry Pi3 B
+# UPDATE: NodeJS Chromium KIOSK installation/Config<br>
+## Raspberry Pi4 / Raspian Buster / NodeJS 10.15.2 / NPM 5.8.0<br><br>
 
-#NodeJS:
+```
+Install Raspbian from image
+Config network if needed
+Disable apt cd rom in /etc/apt/sources.list
+Update && Upgrade through internets
+Add user ‘magic’
+Apt-get install sudo
+Add magic to sudoers
+Apt-get install chromium-browser
+Configure ras
+```
+	
+<br><br>
+## Then add chromium startup 
+<br><br>
+## MAIN MONITOR KIOSK COMMAND:<br>
 
-wget https://nodejs.org/dist/v5.0.0/node-v5.0.0-linux-armv7l.tar.gz 
-<br>tar -xvf node-v5.0.0-linux-armv7l.tar.gz<br>
-cd node-v5.0.0-linux-armv7l<br>
-sudo cp -R * /usr/local/<br>
-Check version using: node -v and npm -v node -v v5.0.0 npm 3.3.6<br><br>
-npm install express<br>
-npm install socket.io<br>
+```
+Sudo pi
+pico ~/.config/lxsession/LXDE-pi/autostart (Stretch)
+-or- pico /etc/xdg/lxsession/LXDE-pi/autostart (Buster)
+```
+<br><br>
+Add:<br>
 
-#Wake on Lan:
-npm install wake_on_lan
+```
+@lxpanel --profile LXDE-pi
+@pcmanfm --desktop --profile LXDE-pi
+@point-rpi
 
-#Ping:
-npm install ping
-
-#Serialport:
-npm install serialport<br>
-If doesn't work on Pi3 (most likely):<br>
-npm install serialport --build-from-source<br>
-
-#PigPio:
-npm install pigpio
-
-#DHT22 Temperature/Humidity Sensor
-
-First download and install BCM2835 driver<br>
-wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.44.tar.gz<br>
-tar zxvf bcm2835-1.44.tar.gz<br>
-cd bcm2835-1.44<br>
-./configure<br>
-make<br>
-sudo make check<br>
-sudo make install<br><br>
-
-Then install npm package:<br>
-npm install node-dht-sensor<br><br>
-
-#Folder structure:
-homeauto.js index.html
-
-Run using 'node homeauto.js'
-
-#UART Config for Raspberry Pi3
-
-! By default /dev/AMA0 (TX/RX pin) is now mapped to the BT transmitter, edit /boot/config.txt:<br>
-On end of file, change <br>
-'enable_uart=0' to 'enable_uart=1' <br>
-and below that add 'dtoverlay=pi3-miniuart-bt' <br>
-
-#Touchscreen 800x480 (Adafruit) full kiosk config
-
-Setting correct screen size, edit /boot/config.txt:<br><br>
-
-uncomment to force a specific HDMI mode (this will force VGA)<br>
-hdmi_group=2<br>
-hdmi_mode=1<br>
-hdmi_mode=87<br>
-hdmi_cvt 800 480 60 0 0 0<br><br>
-
-Install iceweasel:<br>
-apt-get install iceweasel<br><br>
-
-Install Firefox R-Kiosk add-on from within iceweasel:<br>
-https://addons.mozilla.org/en-us/firefox/addon/r-kiosk/
+<br><br>
+@xset s off
+@xset -dpms
+@xset s noblank
+@unclutter
+@chromium-browser --noerrdialogs --disable-infobars --no-sandbox --use-fake-ui-for-media-stream --kiosk --incognito http://localhost:8081
+```
+<br><br>
+## NODE setup<br>
+```
+$sudo apt-get install curl
+$curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+$nvm install 6
+$npm install (from packages)
+```
+<br><br>
+## TTY Support<br>
+```
+$sudo gpasswd --add ${USER} dialout
+$sudo gpasswd --add ${USER} tty
+$shutdown -r
+```
 <br><br>
 
-For keeping screen from going in stand-by:<br><br>
-
-apt-get install xscreensaver<br><br>
-
-In the [Display Mode] tab, set like this - Mode: [Disable Screen Saver]<br><br>
-
-
-
-#### Boot node script on startup:<br>
-`$ sudo npm install -g forever`<br>
-`$ sudo npm install -g forever-service`<br><br>
-
-To install NodeJS script as a service:<br>
-`$ cd /your/path/to/script`<br>
-`$ sudo forever-service install mirrorservice --script mirror.js`<br>
-
+## Boot node script on startup:<br>
+```
+$ sudo npm install -g forever
+$ sudo npm install -g forever-service
+```
+<br><br>
+## To install NodeJS script as a service:<br>
+```
+$ cd /home/user/yournodescriptfolder/
+$ sudo forever-service install yournodeservice --script yournodescript.js
+```
+<br><br>
+## Node logs:<br>
+```
+$pico /var/log/vansservice.log
+```
+<br><br>
+#Live read:<br>
+```
+$tail -f /var/log/vansservice.log
+```
+<br><br>
+## Restart/Status nodeJS service:<br>
+```
+$service vansservice restart
+$service vansservice status
+```
