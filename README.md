@@ -14,19 +14,19 @@ http://www.14core.com/wiring-the-hc11-hc12-434433mhz-transceiver/
 ## Raspberry Pi4 / Raspian Buster / NodeJS 10.15.2 / NPM 5.8.0<br><br>
 
 ```
-Install Raspbian from image
-Config network if needed
-Disable apt cd rom in /etc/apt/sources.list
-Update && Upgrade through internets
-Add user ‘magic’
-Apt-get install sudo
-Add magic to sudoers
-Apt-get install chromium-browser
-Configure ras
+1. Install Raspbian from image
+2. Config network if needed
+3. Disable apt cd rom in /etc/apt/sources.list
+4. Update && Upgrade through internets
+5. Add user ‘blah’
+6. Apt-get install sudo
+7. Add blah to sudoers
+9. Apt-get install chromium-browser
+10. Git clone this repo
 ```
 	
 <br><br>
-## Then add chromium startup 
+## Add chromium startup 
 <br><br>
 ## MAIN MONITOR KIOSK COMMAND:<br>
 
@@ -51,7 +51,7 @@ Add:<br>
 @chromium-browser --noerrdialogs --disable-infobars --no-sandbox --use-fake-ui-for-media-stream --kiosk --incognito http://localhost:8081
 ```
 <br><br>
-## NODE setup<br>
+## NODE + NPM setup<br>
 ```
 $sudo apt-get install curl
 $curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
