@@ -19,11 +19,10 @@ app.get('/*', function (req, res) {
 
 server.listen(8080); 
 
-// AUDIO 
-// -------------------------------------------------------------------------------
+// GLOBAL VARS
 
-var Sound = require('aplay');
-
+var booted = false;
+var espeakbusy = false;
 
 // PIGPIO SET GPIO PINS AND OUTPUT MODE
 // -------------------------------------------------------------------------------
@@ -41,6 +40,14 @@ const wol = require('wake_on_lan');
 //PING UNDER ROOT
 // -------------------------------------------------------------------------------
 const ping = require('ping');
+
+
+// AUDIO (Espeak)
+// -------------------------------------------------------------------------------
+//EXEC
+// -------------------------------------------------------------------------------
+const exec = require('exec');
+ 
 
 
 // SERIALPORT SETUP
@@ -76,6 +83,7 @@ port.on('open', function() {
 
 // ON INCOMING DATA
 parser.on('data', function(data) {
+
   console.log("Receiving Serial Data: " + data);
     var serialdata = data.toString().split('~');
     var devicetype = serialdata[0];
@@ -101,19 +109,19 @@ parser.on('data', function(data) {
   if (devicetype == 'gas'){     
               if (serialactive == 1){
               //GAS DETECTED!!
-                new Sound().play('/home/pi/node/public/audio/224.wav');
+                espeakNORM('Warning. Gas detected!');
               }
   } else if (devicetype == 'motion'){ 
               if (serialactive == 1){
               //MOTION DETECTED!
-                new Sound().play('/home/pi/node/public/audio/219.wav');
+                espeakNORM('Warning. Motion detected!');
               }
   } else {
             if (serialactive == 1){
               //SERIAL SWITCH ACTIVATED
-                new Sound().play('/home/pi/node/public/audio/219.wav');
+                //
               } else {
-                new Sound().play('/home/pi/node/public/audio/225.wav');
+                //
               }
       }
 });
@@ -123,7 +131,7 @@ parser.on('data', function(data) {
 var sensor = require('node-dht-sensor');
 
       function gettemp(){
-            sensor.read(22, 4, function(err, temperature, humidity) {
+            sensor.read(22, 22, function(err, temperature, humidity) {
               if (!err) {
                console.log('temp: ' + temperature.toFixed(1) + '°C, ' +
                          'humidity: ' + humidity.toFixed(1) + '%'
@@ -131,9 +139,10 @@ var sensor = require('node-dht-sensor');
                 io.sockets.emit('sensorCallback', {temp: temperature.toFixed(1), humid: humidity.toFixed(1), type: 'temp'});
               } else {
                 io.sockets.emit('sensorCallback', {temp: '--', humid: '--', type: 'temp'});
-
+                console.log("No temp");
               }
           }); 
+            console.log("get temp function interval")
         };
 
       var temperatureinterval = setInterval(gettemp, 10000);
@@ -148,7 +157,7 @@ io.sockets.on('connection', function (socket) {
 
 // STATUS CALL FROM SERIAL TRANSPONDERS
 
-sp.write("status\n", function(err, res) {
+port.write("status\n", function(err, res) {
   if (err) {
     console.log(err);
     }
@@ -175,11 +184,11 @@ function pings(host, id) {
 
         if ((isAlive == true) && (pingstatus['pingstatus' + id] == true)) {
           io.sockets.emit('relayCallback', {id: id, active: 1, type: 'wol'});
-          new Sound().play('/home/pi/node/public/audio/203.wav');
+            espeakID(id,'wake on lan','Sending signal');
           pingstatus['pingstatus' + id] = false;
         } else if ((isAlive == false) && (pingstatus['pingstatus' + id] == false)){
           io.sockets.emit('relayCallback', {id: id, active: 0, type: 'wol'});
-          new Sound().play('/home/pi/node/public/audio/204.wav');
+            espeakID(id,'Computer','Offline');
           pingstatus['pingstatus' + id] = true;
         }
     });
@@ -250,9 +259,9 @@ pingall();
 
   socket.on('relaycmd', function (data) { 
 
-      var id = data.id;
-      var id = id.replace(/wol|local|gas|switch/g, '');
-      var type = data.type;
+      id = data.id;
+      id = id.replace(/wol|local|gas|switch/g, '');
+      type = data.type;
       var wake = data.wake;
       var wake = wake.replace(/-/g, '\:');
 
@@ -268,10 +277,10 @@ pingall();
             relay1.digitalWrite(relay1.digitalRead() ^ 1);
               if (relay1.digitalRead() == 1) {
                   io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
-                  new Sound().play('/home/pi/node/public/audio/218.wav');
+                    espeakID(id,type,'activated.');
               } else {
                   io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
-                  new Sound().play('/home/pi/node/public/audio/217.wav');
+                    espeakID(id,type,'deactivated.');
               }
 
 
@@ -279,10 +288,10 @@ pingall();
             relay2.digitalWrite(relay2.digitalRead() ^ 1);
               if (relay2.digitalRead() == 1) {
                   io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
-                  new Sound().play('/home/pi/node/public/audio/218.wav');
+                    espeakID(id,type,'activated.');
               } else {
                   io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
-                  new Sound().play('/home/pi/node/public/audio/217.wav');
+                    espeakID(id,type,'deactivated.');
               }
 
 
@@ -290,20 +299,20 @@ pingall();
               relay3.digitalWrite(relay3.digitalRead() ^ 1);
               if (relay3.digitalRead() == 1) {
                   io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
-                  new Sound().play('/home/pi/node/public/audio/218.wav');
+                  espeakID(id,type,'activated.');
               } else {
                   io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
-                  new Sound().play('/home/pi/node/public/audio/217.wav');
+                  espeakID(id,type,'deactivated.');
               }
 
         } else if (id == '4') {
               relay4.digitalWrite(relay4.digitalRead() ^ 1);
               if (relay4.digitalRead() == 1) {
                   io.sockets.emit('relayCallback', {id: id, active: 1, type: type});
-                  new Sound().play('/home/pi/node/public/audio/218.wav');
+                  espeakID(id,type,'activated.');
               } else {
                   io.sockets.emit('relayCallback', {id: id, active: 0, type: type});
-                  new Sound().play('/home/pi/node/public/audio/217.wav');
+                  espeakID(id,type,'deactivated.');
               }
         }
 
@@ -316,8 +325,9 @@ pingall();
             console.log(wake);
             wol.wake(wake);
             io.sockets.emit('relayCallback', {id: id, active: 3, type: type});
+            espeakID(id,'Wake on lan','Signal sent to Computer');
             pinghalt(5000);
-            new Sound().play('/home/pi/node/public/audio/215.wav');
+            
 
 
 // SEND TO SERIAL REMOTE HC12 TRANSPONDERS (ONLY ID, ARDUINO WILL CHECK IF HIGH OR LOW)
@@ -326,6 +336,7 @@ pingall();
     } else if (type == 'switch') {
             write(id + "\n");
             io.sockets.emit('relayCallback', {id: id, active: 4, type: type});
+            espeakID(id,'Remote serial','Signal sent to controller');
     }
         
         function write(message) {
@@ -338,12 +349,9 @@ pingall();
         }
 
 
-
-
-
-
 // CLOSE RELAYCMD
    });
+
 
 
 // CLOSE SHIT
@@ -354,9 +362,11 @@ pingall();
 
 console.log("running");
 
-new Sound().play('/home/pi/node/public/audio/071.wav');
- 
+setTimeout(function(){
+    booted = true;
+    espeakNORM('Home Automation System Online.');
 
+ }, 5000);
 
 // NODE EXIT HANDLER
 // -------------------------------------------------------------------------------
@@ -365,12 +375,33 @@ new Sound().play('/home/pi/node/public/audio/071.wav');
 process.stdin.resume();
 
 function exitHandler(options, err) {
+  espeakNORM('Home Automation System Offline.');
     if (options.cleanup) console.log('clean');
     if (err) console.log(err.stack);
     if (options.exit) process.exit();
-
-    new Sound().play('/home/pi/node/public/audio/224.wav');
 }
+
+
+function espeakID(id,type,say){
+  if (booted == true && espeakbusy == false){
+      espeakbusy = true;
+        exec('espeak -ven-uk+m2 -s120 -p5 "' + type + ' ' + id + '. ' + say + '. " --stdout | aplay', function(err, out, code){
+      espeakbusy = false;
+      console.log("espeak done. Not busy.");
+    });
+  }
+}
+function espeakNORM(say){
+  if (booted == true && espeakbusy == false){
+      espeakbusy = true;
+        exec('espeak -ven-uk+m2 -s120 -p5 "' + say + '." --stdout | aplay', function(err, out, code) {
+      espeakbusy = false;
+       console.log("espeak done. Not busy.");
+    });
+
+  }
+}
+
 
 //do something when app is closing
 process.on('exit', exitHandler.bind(null,{cleanup:true}));

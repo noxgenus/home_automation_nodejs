@@ -1,0 +1,32 @@
+{
+  "name": "home_automation_nodejs",
+  "version": "1.0.0",
+  "description": "home puter thing",
+  "main": "homeauto.js",
+  "scripts": {
+    "test": "node homeauto.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noxgenus/home_automation_nodejs.git"
+  },
+  "keywords": [
+    "pi"
+  ],
+  "author": "me",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/noxgenus/home_automation_nodejs/issues"
+  },
+  "homepage": "https://github.com/noxgenus/home_automation_nodejs#readme",
+  "dependencies": {
+    "aplay": "^1.2.0",
+    "exec": "^0.2.1",
+    "express": "^4.17.1",
+    "pigpio": "^2.0.1",
+    "ping": "^0.2.2",
+    "serialport": "^8.0.5",
+    "socketio": "^1.0.0",
+    "wake_on_lan": "^1.0.0"
+  }
+}
