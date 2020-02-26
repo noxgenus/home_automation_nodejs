@@ -14,12 +14,11 @@ http://www.14core.com/wiring-the-hc11-hc12-434433mhz-transceiver/
 ## Raspberry Pi4 / Raspian Buster / NodeJS 10.15.2 / NPM 5.8.0<br><br>
 
 ```
-1. Install Raspbian from image
+1. Install Raspbian Stretch or Buster from SD image
 2. Config network if needed
-3. Disable apt cd rom in /etc/apt/sources.list
-4. Update && Upgrade through internets
+4. apt update && apt upgrade through internets
 5. Add user ‘blah’
-6. Apt-get install sudo
+6. Apt install sudo
 7. Add blah to sudoers
 9. Apt-get install chromium-browser
 10. Git clone this repo
@@ -59,12 +58,45 @@ $nvm install 6
 $npm install (from packages)
 ```
 <br><br>
-## TTY Support<br>
-```
-$sudo gpasswd --add ${USER} dialout
-$sudo gpasswd --add ${USER} tty
-$shutdown -r
-```
+
+##Wake on Lan:<br>
+npm install wake_on_lan<br><br>
+
+##Ping:
+npm install ping<br><br>
+
+##Serialport:
+npm install serialport<br>
+If doesn't work on Pi3 (most likely):<br>
+npm install serialport --build-from-source<br><br>
+
+##PigPio:
+npm install pigpio
+
+##DHT22 Temperature/Humidity Sensor
+First download and install BCM2835 driver<br>
+wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.44.tar.gz<br>
+tar zxvf bcm2835-1.44.tar.gz<br>
+cd bcm2835-1.44<br>
+./configure<br>
+make<br>
+sudo make check<br>
+sudo make install<br><br>
+Then install npm package:<br>
+npm install node-dht-sensor<br><br>
+
+##UART Config for Raspberry Pi3
+! By default /dev/AMA0 (TX/RX pin) is now mapped to the BT transmitter, edit /boot/config.txt:<br>
+On end of file, change <br>
+'enable_uart=0' to 'enable_uart=1' <br>
+and below that add 'dtoverlay=pi3-miniuart-bt' <br>
+#Touchscreen 800x480 (Adafruit) full kiosk config
+Setting correct screen size, edit /boot/config.txt:<br><br>
+uncomment to force a specific HDMI mode (this will force VGA)<br>
+hdmi_group=2<br>
+hdmi_mode=1<br>
+hdmi_mode=87<br>
+hdmi_cvt 800 480 60 0 0 0<br><br>
 <br><br>
 
 ## Boot node script on startup:<br>
