@@ -22,7 +22,7 @@
   "dependencies": {
     "aplay": "^1.2.0",
     "exec": "^0.2.1",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "pigpio": "^2.0.1",
     "ping": "^0.2.2",
     "serialport": "^8.0.5",
